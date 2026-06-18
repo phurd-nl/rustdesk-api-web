@@ -1,0 +1,75 @@
+// NextSession theme for the web console.
+// Matches the NextLink "Ticketing" app design language: UniFi-inspired — clean, light,
+// blue-forward. Primary = UniFi blue #0559c9; NextLink orange (#f5a623) survives only as a
+// subtle warning accent. Maps those tokens onto Element Plus CSS variables.
+// Imported last in main.js so it overrides element-plus/dist/index.css.
+
+:root {
+  // --- brand primary (UniFi blue) + Element Plus shade ramp ---
+  --ns-primary: #0559c9;
+  --el-color-primary: #0559c9;
+  --el-color-primary-light-3: #3a7dd6;
+  --el-color-primary-light-5: #82ace4;
+  --el-color-primary-light-7: #b4ccef;
+  --el-color-primary-light-8: #cdddf5;
+  --el-color-primary-light-9: #e6f0ff; // = Ticketing --accent wash
+  --el-color-primary-dark-2: #044aa1;
+
+  // --- status colors (Ticketing chart palette) ---
+  --el-color-success: #27a35a;
+  --el-color-warning: #f5a623; // NextLink orange, demoted to "notice" only
+  --el-color-danger: #f03a3a;
+  --el-color-error: #f03a3a;
+  --el-color-info: #646e78;
+
+  // --- surfaces / text / lines (light, UniFi) ---
+  --el-bg-color: #ffffff;          // cards / popovers
+  --el-bg-color-page: #f6f8fa;     // app background
+  --el-bg-color-overlay: #ffffff;
+  --el-text-color-primary: #1b1f24;
+  --el-text-color-regular: #50565e;
+  --el-text-color-secondary: #646e78;
+  --el-border-color: rgba(17, 24, 39, 0.1);
+  --el-border-color-light: rgba(17, 24, 39, 0.07);
+  --el-border-color-lighter: rgba(17, 24, 39, 0.06);
+  --el-fill-color-light: #eef1f4;  // = Ticketing --secondary/--muted
+  --el-fill-color-blank: #ffffff;
+
+  // --- shape: softer corners (Ticketing --radius 0.5rem) ---
+  --el-border-radius-base: 8px;
+  --el-border-radius-small: 6px;
+
+  // keep the project's legacy var in sync
+  --primaryColor: #0559c9;
+}
+
+body {
+  background: var(--el-bg-color-page);
+  color: var(--el-text-color-primary);
+}
+
+// Sidebar/menu: near-white rail with a blue active pill (UniFi).
+.el-menu {
+  --el-menu-bg-color: #ffffff;
+  --el-menu-text-color: #50565e;
+  --el-menu-hover-bg-color: #eef4ff;
+  --el-menu-active-color: #0559c9;
+  border-right: 1px solid rgba(17, 24, 39, 0.06);
+}
+.el-menu-item.is-active {
+  background: #eef4ff;
+  border-radius: 8px;
+  margin: 2px 8px;
+}
+
+// Cards/buttons: rounded, soft borders, gentle shadow — matches Ticketing surfaces.
+.el-card,
+.el-dialog,
+.el-table {
+  border-radius: 10px;
+  border: 1px solid rgba(17, 24, 39, 0.07);
+}
+.el-button {
+  border-radius: 8px;
+  font-weight: 500;
+}

@@ -9,6 +9,7 @@ import { pinia } from '@/store'
 import '@/permission'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import '@/styles/style.scss'
+import '@/styles/nextsession-theme.scss' // NextSession (UniFi/Ticketing) theme — load last to win
 import * as ElementIcons from '@element-plus/icons'
 
 const app = createApp(App)
