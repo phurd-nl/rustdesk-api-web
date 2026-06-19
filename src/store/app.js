@@ -18,12 +18,12 @@ const langs = {
   'es': { name: 'Español', value: es, sideBarWidth: '280px' },
   'zh-TW': { name: '中文繁体', value: zhTw, sideBarWidth: '210px' },
 }
-const defaultLang = localStorage.getItem('lang') || navigator.language || 'zh-CN'
+const defaultLang = localStorage.getItem('lang') || navigator.language || 'en'
 export const useAppStore = defineStore({
   id: 'App',
   state: () => ({
     setting: {
-      title: 'Rustdesk API Admin',
+      title: 'NextSession Admin',
       hello: '',
       sideIsCollapse: false,
       logo,

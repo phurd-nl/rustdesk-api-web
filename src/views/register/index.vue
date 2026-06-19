@@ -1,7 +1,8 @@
 <template>
   <div class="login-container">
+    <img src="@/assets/wordmark.png" alt="NextSession" class="login-wordmark"/>
     <div class="login-card">
-      <img src="@/assets/logo.png" alt="logo" class="login-logo"/>
+      <h1 class="login-title">{{ T('Register') }}</h1>
       <el-form ref="f" :model="form" label-position="top" class="login-form" :rules="rules">
         <el-form-item :label="T('Username')" prop="username">
           <el-input v-model="form.username" class="login-input"></el-input>
@@ -20,11 +21,12 @@
                     class="login-input"></el-input>
         </el-form-item>
         <el-form-item label="">
-          <el-button @click="submit" class="login-button" type="success">{{ T('Submit') }}</el-button>
+          <el-button @click="submit" class="login-button" type="primary">{{ T('Submit') }}</el-button>
           <el-button @click="toLogin" class="login-button">{{ T('ToLogin') }}</el-button>
         </el-form-item>
       </el-form>
     </div>
+    <p class="login-footer">NextSession Web &middot; secured by Nextlink</p>
   </div>
 </template>
 
@@ -90,33 +92,54 @@
 </script>
 
 <style scoped lang="scss">
+/* NextVault-family register: matches login.vue. */
+$page: #0b1622;
+$orange: #f49e1b;
+
 .login-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #2d3a4b;
+  min-height: 100vh;
+  background: $page;
+  background-image:
+    radial-gradient(900px 520px at 96% -6%, rgba(244, 158, 27, 0.10), transparent 60%),
+    radial-gradient(820px 520px at -6% 108%, rgba(43, 139, 255, 0.08), transparent 58%);
   padding: 20px;
   box-sizing: border-box;
 }
 
+.login-wordmark {
+  width: 300px;
+  max-width: 70vw;
+  height: auto;
+  margin-bottom: 36px;
+  display: block;
+}
+
 .login-card {
-  width: 360px;
-  background-color: #283342;
-  padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 340px;
+  max-width: 100%;
+  background: rgba(22, 33, 46, 0.92);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 32px;
+  border-radius: 14px;
+  box-shadow: 0 24px 60px -18px rgba(0, 0, 0, 0.6);
   text-align: center;
 }
 
-h1 {
-  margin-bottom: 20px;
+.login-title {
+  margin: 0 0 24px;
   font-size: 24px;
-  font-weight: bold;
+  font-weight: 700;
+  color: #eef2f6;
 }
 
 .login-form {
-  margin-bottom: 20px;
+  margin-bottom: 8px;
 }
 
 .login-input {
@@ -125,32 +148,48 @@ h1 {
 
 .login-button {
   width: 100%;
-  height: 40px;
-  margin-bottom: 20px;
-  margin-top: 20px;
+  height: 44px;
+  margin: 4px 0 12px;
   margin-left: 0;
+  border-radius: 10px;
+  font-weight: 600;
+  &.el-button--primary {
+    --el-button-bg-color: #{$orange};
+    --el-button-border-color: #{$orange};
+    --el-button-hover-bg-color: #f7ad3e;
+    --el-button-hover-border-color: #f7ad3e;
+    --el-button-active-bg-color: #e08e10;
+    color: #1b1206;
+  }
+  &:not(.el-button--primary) {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #cdd5de;
+  }
 }
 
-.login-logo {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 20px;
-  display: block;
+.login-footer {
+  margin-top: 28px;
+  font-size: 13px;
+  color: #465562;
 }
 
 .el-form-item {
   ::v-deep(.el-form-item__label) {
-    color: #fff;
+    color: #aab4bf;
   }
 
   .el-input {
     ::v-deep(.el-input__wrapper) {
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: transparent;
+      background: rgba(255, 255, 255, 0.03);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+      border-radius: 10px;
     }
-
+    ::v-deep(.el-input__wrapper.is-focus) {
+      box-shadow: 0 0 0 1px #{$orange} inset;
+    }
     ::v-deep(input) {
-      color: #fff;
+      color: #eef2f6;
     }
   }
 }

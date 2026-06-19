@@ -46,6 +46,12 @@
 body {
   background: var(--el-bg-color-page);
   color: var(--el-text-color-primary);
+  // Ticketing depth: subtle radial color washes fixed behind the app (UniFi blue + cyan + violet).
+  background-image:
+    radial-gradient(900px 520px at 96% -6%, color-mix(in srgb, var(--ns-primary) 14%, transparent), transparent 60%),
+    radial-gradient(820px 520px at -6% 108%, color-mix(in srgb, #00a5c7 12%, transparent), transparent 58%),
+    radial-gradient(720px 600px at 55% 118%, color-mix(in srgb, #8b5cf6 9%, transparent), transparent 60%);
+  background-attachment: fixed;
 }
 
 // Sidebar/menu: near-white rail with a blue active pill (UniFi).
@@ -62,14 +68,98 @@ body {
   margin: 2px 8px;
 }
 
-// Cards/buttons: rounded, soft borders, gentle shadow — matches Ticketing surfaces.
+// Cards/dialogs/popovers: frosted, elevated glass surfaces — Ticketing's signature .surface look,
+// mapped onto Element Plus containers. Translucent + blur so the gradient washes show through.
 .el-card,
 .el-dialog,
+.el-popover.el-popper,
+.el-message-box,
+.el-drawer {
+  border-radius: 12px;
+  border: 1px solid var(--el-border-color-light);
+  background: color-mix(in srgb, var(--el-bg-color) 78%, transparent);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  box-shadow:
+    0 1px 2px rgba(16, 24, 40, 0.06),
+    0 14px 30px -12px rgba(16, 24, 40, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
 .el-table {
-  border-radius: 10px;
-  border: 1px solid rgba(17, 24, 39, 0.07);
+  border-radius: 12px;
+  border: 1px solid var(--el-border-color-light);
+  overflow: hidden;
 }
 .el-button {
   border-radius: 8px;
   font-weight: 500;
+}
+
+// ---------------------------------------------------------------------------
+// Dark mode — Ticketing's full .dark palette mapped onto Element Plus dark vars.
+// useDark() (vueuse) toggles `html.dark`; element-plus dark css-vars are imported in main.js,
+// so we override them here (loaded last). Mirrors the dark block of Ticketing index.css.
+// ---------------------------------------------------------------------------
+html.dark {
+  --ns-primary: #2b8bff; // brighter UniFi blue for dark surfaces
+  --el-color-primary: #2b8bff;
+  --el-color-primary-light-3: #2474d6;
+  --el-color-primary-light-5: #1d5ea8;
+  --el-color-primary-light-7: #163f6e;
+  --el-color-primary-light-8: #13314f;
+  --el-color-primary-light-9: #16263d; // = Ticketing dark --accent
+  --el-color-primary-dark-2: #5aa6ff;
+
+  --el-color-success: #27a35a;
+  --el-color-warning: #f5a623;
+  --el-color-danger: #f03a3a;
+  --el-color-error: #f03a3a;
+  --el-color-info: #9aa3ad;
+
+  --el-bg-color: #1c2026;          // cards / popovers
+  --el-bg-color-page: #14171c;     // app background
+  --el-bg-color-overlay: #1c2026;
+  --el-text-color-primary: #e6e8eb;
+  --el-text-color-regular: #aab2bd;
+  --el-text-color-secondary: #9aa3ad;
+  --el-border-color: rgba(255, 255, 255, 0.12);
+  --el-border-color-light: rgba(255, 255, 255, 0.08);
+  --el-border-color-lighter: rgba(255, 255, 255, 0.06);
+  --el-fill-color-light: #232830;  // = Ticketing dark --secondary/--muted
+  --el-fill-color-blank: #1c2026;
+
+  --primaryColor: #2b8bff;
+
+  body {
+    background: var(--el-bg-color-page);
+    background-image:
+      radial-gradient(900px 520px at 96% -6%, color-mix(in srgb, var(--ns-primary) 18%, transparent), transparent 60%),
+      radial-gradient(820px 520px at -6% 108%, color-mix(in srgb, #00a5c7 14%, transparent), transparent 58%),
+      radial-gradient(720px 600px at 55% 118%, color-mix(in srgb, #8b5cf6 12%, transparent), transparent 60%);
+  }
+
+  // Sidebar dark rail (Ticketing dark --sidebar #11141a).
+  .el-menu {
+    --el-menu-bg-color: #11141a;
+    --el-menu-text-color: #aab2bd;
+    --el-menu-hover-bg-color: #16263d;
+    --el-menu-active-color: #6cb0ff;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .el-menu-item.is-active {
+    background: #16263d;
+  }
+
+  // Dark glass: faint light top-edge, deeper shadow for elevation.
+  .el-card,
+  .el-dialog,
+  .el-popover.el-popper,
+  .el-message-box,
+  .el-drawer {
+    background: color-mix(in srgb, var(--el-bg-color) 72%, transparent);
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.4),
+      0 22px 50px -16px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
 }

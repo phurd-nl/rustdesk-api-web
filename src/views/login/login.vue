@@ -1,7 +1,8 @@
 <template>
   <div class="login-container">
+    <img src="@/assets/wordmark.png" alt="NextSession" class="login-wordmark"/>
     <div class="login-card">
-      <img src="@/assets/logo.png" alt="logo" class="login-logo"/>
+      <h1 class="login-title">{{ T('Login') }}</h1>
 
       <el-form v-if="!disablePwd" label-position="top" class="login-form">
         <el-form-item :label="T('Username')">
@@ -30,14 +31,23 @@
       </div>
 
       <div class="oidc-options">
-        <div v-for="(option, index) in options" :key="index" class="oidc-option">
-          <el-button @click="handleOIDCLogin(option.name)" class="oidc-btn">
-            <img :src="getProviderImage(option.name)" alt="provider" class="oidc-icon"/>
-            <span>{{ T(option.name) }}</span>
-          </el-button>
-        </div>
+        <el-button
+          v-for="(option, index) in options"
+          :key="index"
+          @click="handleOIDCLogin(option.name)"
+          class="oidc-btn"
+          :class="{ 'oidc-primary': disablePwd }"
+          :type="disablePwd ? 'primary' : 'default'">
+          <img :src="getProviderImage(option.name)" alt="provider" class="oidc-icon"/>
+          <span>{{ ssoLabel(option.name) }}</span>
+        </el-button>
       </div>
+
+      <p v-if="disablePwd && options.length === 0" class="sso-empty">
+        {{ T('No single sign-on provider is configured.') }}
+      </p>
     </div>
+    <p class="login-footer">NextSession Web &middot; secured by Nextlink</p>
   </div>
 </template>
 
@@ -125,6 +135,13 @@
     return providerImageMap[provider.toLowerCase()] || providerImageMap.default
   }
 
+  // SSO-only mode (password login disabled): one provider reads as "Use single sign-on";
+  // multiple providers name each one.
+  const ssoLabel = (name) => {
+    if (disablePwd.value && options.length === 1) return T('Use single sign-on')
+    return T(name)
+  }
+
   const allowRegister = ref(false)
   const disablePwd = ref(false)
   const loadLoginOptions = async () => {
@@ -169,79 +186,112 @@
 </script>
 
 <style scoped lang="scss">
+/* NextVault-family login: dark canvas, centered wordmark, frosted card, orange primary. */
+$page: #0b1622;
+$card: #16212e;
+$orange: #f49e1b;
+$muted: #8b98a6;
+
 .login-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #2d3a4b;
+  min-height: 100vh;
+  background: $page;
+  background-image:
+    radial-gradient(900px 520px at 96% -6%, rgba(244, 158, 27, 0.10), transparent 60%),
+    radial-gradient(820px 520px at -6% 108%, rgba(43, 139, 255, 0.08), transparent 58%);
   padding: 20px;
   box-sizing: border-box;
 }
 
+.login-wordmark {
+  width: 300px;
+  max-width: 70vw;
+  height: auto;
+  margin-bottom: 36px;
+  display: block;
+}
+
 .login-card {
-  width: 360px;
-  background-color: #283342;
-  padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 340px;
+  max-width: 100%;
+  background: rgba(22, 33, 46, 0.92);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 32px;
+  border-radius: 14px;
+  box-shadow: 0 24px 60px -18px rgba(0, 0, 0, 0.6);
   text-align: center;
 }
 
-h1 {
-  margin-bottom: 20px;
+.login-title {
+  margin: 0 0 24px;
   font-size: 24px;
-  font-weight: bold;
+  font-weight: 700;
+  color: #eef2f6;
 }
 
 .login-form {
-  margin-bottom: 20px;
+  margin-bottom: 8px;
 }
 
 .login-input {
   width: 100%;
-  .captcha{
+  .captcha {
     cursor: pointer;
     width: 150px;
   }
 }
-.captcha-input{
+.captcha-input {
   :deep(.el-input-group__append) {
-    border-radius: 5px;
+    border-radius: 8px;
     padding: 0;
     overflow: hidden;
   }
 }
 
+/* Primary action = NextVault orange (overrides the app's blue, login only). */
 .login-button {
   width: 100%;
-  height: 40px;
-  margin-bottom: 20px;
+  height: 44px;
+  margin: 4px 0 12px;
   margin-left: 0;
+  border-radius: 10px;
+  font-weight: 600;
+  &.el-button--primary {
+    --el-button-bg-color: #{$orange};
+    --el-button-border-color: #{$orange};
+    --el-button-hover-bg-color: #f7ad3e;
+    --el-button-hover-border-color: #f7ad3e;
+    --el-button-active-bg-color: #e08e10;
+    color: #1b1206;
+  }
+  &:not(.el-button--primary) {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #cdd5de;
+  }
 }
 
 .divider {
   display: flex;
   align-items: center;
-  margin: 20px 0;
-  font-size: 14px;
-  color: #888;
+  margin: 18px 0;
+  font-size: 13px;
+  color: $muted;
 
   &::before,
   &::after {
     content: '';
     flex: 1;
     height: 1px;
-    background-color: #ddd;
+    background-color: rgba(255, 255, 255, 0.1);
   }
-
-  &::before {
-    margin-right: 10px;
-  }
-
-  &::after {
-    margin-left: 10px;
-  }
+  &::before { margin-right: 10px; }
+  &::after { margin-left: 10px; }
 }
 
 .oidc-options {
@@ -256,41 +306,70 @@ h1 {
   justify-content: center;
   gap: 10px;
   width: 100%;
-  height: 50px;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  color: black;
+  height: 46px;
+  margin: 0;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  color: #cdd5de;
   font-size: 14px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-weight: 500;
+  & + .oidc-btn { margin-top: 10px; }
+  &:hover {
+    background: rgba(244, 158, 27, 0.12);
+    border-color: rgba(244, 158, 27, 0.5);
+    color: #f7ad3e;
+  }
+  /* SSO-only: the provider button is the orange primary CTA ("Use single sign-on"). */
+  &.oidc-primary {
+    height: 48px;
+    font-size: 15px;
+    font-weight: 600;
+    background: $orange;
+    border-color: $orange;
+    color: #1b1206;
+    &:hover {
+      background: #f7ad3e;
+      border-color: #f7ad3e;
+      color: #1b1206;
+    }
+  }
+}
+
+.sso-empty {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #8b98a6;
 }
 
 .oidc-icon {
-  width: 24px;
-  height: 24px;
-  margin-right: 10px;
+  width: 22px;
+  height: 22px;
+  margin-right: 8px;
 }
 
-.login-logo {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 20px;
-  display: block;
+.login-footer {
+  margin-top: 28px;
+  font-size: 13px;
+  color: #465562;
 }
 
 .el-form-item {
   ::v-deep(.el-form-item__label) {
-    color: #fff;
+    color: #aab4bf;
   }
 
   .el-input {
     ::v-deep(.el-input__wrapper) {
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: transparent;
+      background: rgba(255, 255, 255, 0.03);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+      border-radius: 10px;
     }
-
+    ::v-deep(.el-input__wrapper.is-focus) {
+      box-shadow: 0 0 0 1px #{$orange} inset;
+    }
     ::v-deep(input) {
-      color: #fff;
+      color: #eef2f6;
     }
   }
 }
