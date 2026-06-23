@@ -9,10 +9,15 @@
           <div>{{ userStore.email }}</div>
         </el-form-item>
         <el-form-item :label="T('Password')" prop="password">
-          <el-button type="danger" @click="showChangePwd">{{ T('ChangePassword') }}</el-button>
+          <el-button type="primary" @click="showChangePwd">{{ T('ChangePassword') }}</el-button>
         </el-form-item>
         <el-form-item label="OIDC">
-          <el-table :data="oidcData" border fit>
+          <div v-if="!hasLinkedProvider" class="empty-panel">
+            <h4>No sign-in method linked</h4>
+            <p>No sign-in method linked — link your Microsoft Entra ID to sign in with your work account.</p>
+            <el-button type="primary" @click="toBindEntra">Link Microsoft Entra ID</el-button>
+          </div>
+          <el-table v-else :data="oidcData" border fit>
             <el-table-column :label="T('IdP')" prop="op" align="center"></el-table-column>
             <el-table-column :label="T('Status')" prop="status" align="center">
               <template #default="{ row }">
@@ -63,11 +68,18 @@
 
   }
   getMyOauth()
+  const hasLinkedProvider = computed(_ => oidcData.value.some(o => o.status === 1))
   const toBind = async (row) => {
     const res = await bind({ op: row.op }).catch(_ => false)
     if (res) {
       const { code, url } = res.data
       window.open(url)
+    }
+  }
+  const toBindEntra = () => {
+    const row = oidcData.value[0]
+    if (row) {
+      toBind(row)
     }
   }
   const toUnBind = async (row) => {

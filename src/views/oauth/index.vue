@@ -4,12 +4,17 @@
       <el-form inline label-width="80px">
         <el-form-item>
           <el-button type="primary" @click="handlerQuery">{{ T('Filter') }}</el-button>
-          <el-button type="danger" @click="toAdd">{{ T('Add') }}</el-button>
+          <el-button type="primary" @click="toAdd">{{ T('Add') }}</el-button>
         </el-form-item>
       </el-form>
     </el-card>
     <el-card class="list-body" shadow="hover">
-      <el-table :data="listRes.list" v-loading="listRes.loading" border>
+      <div v-if="!listRes.loading && listRes.list.length === 0" class="empty-panel">
+        <h4>No identity providers configured</h4>
+        <p>No identity providers configured — Add Microsoft Entra ID</p>
+        <el-button type="primary" @click="toAdd">{{ T('Add') }}</el-button>
+      </div>
+      <el-table v-else :data="listRes.list" v-loading="listRes.loading" border>
         <el-table-column prop="id" label="ID" align="center"/>
         <el-table-column prop="op" :label="T('IdP')" align="center"/>
         <el-table-column prop="oauth_type" :label="T('Type')" align="center"/>

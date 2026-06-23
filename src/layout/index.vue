@@ -46,21 +46,27 @@
 
 <style lang="scss" scoped>
 .app-header {
-  background-color: #3f454b;
-  color: var(--basicWhite);
+  background-color: var(--ns-card, #ffffff);
+  color: var(--ns-fg, #1b1f24);
+  border-bottom: 1px solid var(--ns-border, rgba(17, 24, 39, 0.07));
   display: flex;
-  height: 50px;
+  align-items: center;
+  height: 56px;
+  padding: 0 20px;
 }
 
 .header-tags {
   height: auto;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--ns-border, rgba(17, 24, 39, 0.07));
+  background: var(--ns-bg, #f6f8fa);
   display: flex;
-  padding: 0;
+  padding: 6px 16px 0;
+  gap: 6px;
 }
 
 .app-left {
   transition: width 0.5s;
+  border-right: 1px solid var(--ns-border, rgba(17, 24, 39, 0.07));
 }
 
 .app-container {

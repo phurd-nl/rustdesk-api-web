@@ -27,25 +27,28 @@
     "One": "Reset Password"
   },
   "ChangePassword": {
-    "One": "Change Password"
+    "One": "Change password"
   },
   "Userinfo": {
-    "One": "User Info"
+    "One": "Account"
   },
   "ParamRequired": {
     "One": "{param} is required"
   },
   "HasBind": {
-    "One": "Has bind"
+    "One": "Linked"
   },
   "NoBind": {
-    "One": "No bind"
+    "One": "Not linked"
   },
   "UnBind": {
-    "One": "UnBind"
+    "One": "Unlink"
   },
   "ToBind": {
-    "One": "To Bind"
+    "One": "Link"
+  },
+  "MyPeer": {
+    "One": "My Devices"
   },
   "Confirm?": {
     "One": "{param} Confirm?"
@@ -201,22 +204,22 @@
     "One": "Info"
   },
   "AddressBooks": {
-    "One": "Address Books"
+    "One": "Saved Devices"
   },
   "System": {
     "One": "System"
   },
   "PeerManage": {
-    "One": "Peers"
+    "One": "Device Management"
   },
   "AddressBookManage": {
-    "One": "Address Books"
+    "One": "Saved Devices"
   },
   "GroupManage": {
-    "One": "Groups"
+    "One": "Group Management"
   },
   "UserManage": {
-    "One": "Users"
+    "One": "User Management"
   },
   "UserAdd": {
     "One": "User Add"
@@ -228,10 +231,13 @@
     "One": "Tags"
   },
   "OauthManage": {
-    "One": "Oauth"
+    "One": "Identity Providers"
+  },
+  "Oauth": {
+    "One": "Identity Providers"
   },
   "LoginLog": {
-    "One": "Login Log"
+    "One": "Sign-in Log"
   },
   "LastOnlineTime": {
     "One": "Last Online Time"
@@ -352,7 +358,7 @@
     "One": "Timeout"
   },
   "AuditConnLog": {
-    "One": "Connection Log"
+    "One": "Audit · Connections"
   },
   "Peer": {
     "One": "Peer",
@@ -368,7 +374,7 @@
     "One": "Close Time"
   },
   "AuditFileLog": {
-    "One": "File Log"
+    "One": "Audit · File Transfers"
   },
   "Common": {
     "One": "Common"
@@ -401,7 +407,7 @@
     "One": "To Local"
   },
   "AddressBookName": {
-    "One": "Address Book Name"
+    "One": "Address Books"
   },
   "AddRule": {
     "One": "Add Rule"
@@ -431,7 +437,7 @@
     "One": "Address Book"
   },
   "AddressBookNameManage": {
-    "One": "Address Book Names"
+    "One": "Address Books"
   },
   "MyAddressBookTips": {
     "One": "\"My Address Book\" is the default of the system, cannot be modified or deleted"
@@ -458,7 +464,7 @@
     "One": "To Login"
   },
   "UserToken": {
-    "One": "User Token"
+    "One": "API Tokens"
   },
   "BatchAddToAB": {
     "One": "Batch Add To Address Book"
@@ -470,7 +476,7 @@
     "One": "User"
   },
   "ShareRecord": {
-    "One": "Share Record"
+    "One": "Shared Records"
   },
   "Second": {
     "One": "Second"
@@ -479,7 +485,7 @@
     "One": "Captcha"
   },
   "ServerCmd": {
-    "One": "Server Cmd"
+    "One": "Server Commands"
   },
   "Simple": {
     "One": "Simple"
@@ -515,7 +521,7 @@
     "One": "Result"
   },
   "DeviceGroupManage": {
-    "One": "Device Group Manage"
+    "One": "Device Groups"
   },
   "Drop file here or click to upload": {
     "One": "Drop file here or click to upload"

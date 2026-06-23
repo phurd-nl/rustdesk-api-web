@@ -27,7 +27,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handlerQuery">{{ T('Filter') }}</el-button>
-          <el-button type="danger" @click="toAdd">{{ T('Add') }}</el-button>
+          <el-button type="primary" @click="toAdd">{{ T('Add') }}</el-button>
           <el-button type="success" @click="toExport">{{ T('Export') }}</el-button>
           <el-popover :visible="showImport" placement="bottom" :width="600">
             <el-upload
@@ -53,7 +53,7 @@
             </el-upload>
             <el-button @click="showImport=false" type="primary">{{ T('Cancel') }}</el-button>
             <template #reference>
-              <el-button @click="showImport=true" type="danger" :icon="ArrowDown">{{ T('Import') }}</el-button>
+              <el-button @click="showImport=true" type="primary" :icon="ArrowDown">{{ T('Import') }}</el-button>
             </template>
           </el-popover>
           <el-button type="danger" @click="toBatchDelete">{{ T('BatchDelete') }}</el-button>

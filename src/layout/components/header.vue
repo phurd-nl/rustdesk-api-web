@@ -3,10 +3,7 @@
     <el-icon-expand v-if="setting.sideIsCollapse"></el-icon-expand>
     <el-icon-fold v-else></el-icon-fold>
   </el-icon>
-  <div class="header-logo">
-    <img :src="setting.logo" alt="" class="logo">
-    <div class="title">{{setting.title}}</div>
-  </div>
+  <div class="ctx">{{ setting.title }}</div>
   <Setting></Setting>
 </template>
 
@@ -43,26 +40,23 @@
     height: 100%;
     display: flex;
     align-items: center;
-    margin-right: 10px;
-    font-size: 16px;
+    margin-right: 14px;
+    font-size: 18px;
+    color: var(--ns-muted, #646e78);
     cursor: pointer;
+
+    &:hover {
+      color: var(--ns-primary, #0559c9);
+    }
   }
 
-  .header-logo {
+  .ctx {
     display: flex;
-    height: 100%;
     align-items: center;
-
-    .title {
-      display: block;
-      margin-left: 10px;
-    }
-
-    .logo {
-      display: block;
-      width: 30px;
-      height: 30px;
-    }
+    height: 100%;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--ns-fg, #1b1f24);
   }
 
 

@@ -1,165 +1,489 @@
-// NextSession theme for the web console.
-// Matches the NextLink "Ticketing" app design language: UniFi-inspired — clean, light,
-// blue-forward. Primary = UniFi blue #0559c9; NextLink orange (#f5a623) survives only as a
-// subtle warning accent. Maps those tokens onto Element Plus CSS variables.
-// Imported last in main.js so it overrides element-plus/dist/index.css.
+// =============================================================================
+// NextSession console theme — flat / clean / light (UniFi · Ticketing look).
+// Reproduces the approved HTML/CSS mockup on top of Element Plus.
+//
+// Design tokens (source of truth — see approved mockup):
+//   primary #0559c9 (press #0449a6) · bg #f6f8fa · card #fff · fg #1b1f24 · muted #646e78
+//   accent-wash #e6f0ff · border rgba(17,24,39,.07) · border-strong rgba(17,24,39,.12)
+//   success #27a35a · warning #f5a623 · danger #f03a3a · brand-orange #f49e1b
+//   radius 8px (cards 14px) · system font stack
+//   shadow-sm 0 1px 2px rgba(17,24,39,.04),0 1px 3px rgba(17,24,39,.06)
+//   shadow-md 0 4px 16px rgba(17,24,39,.06),0 1px 4px rgba(17,24,39,.05)
+//
+// This file is imported LAST in main.js so it overrides element-plus/dist/index.css
+// AND element-plus/theme-chalk/dark/css-vars.css. No backdrop blur, no gradients —
+// the mockup is intentionally flat.
+// =============================================================================
 
 :root {
-  // --- brand primary (UniFi blue) + Element Plus shade ramp ---
+  // --- design tokens (also exposed for utility classes below) ---
   --ns-primary: #0559c9;
+  --ns-primary-press: #0449a6;
+  --ns-bg: #f6f8fa;
+  --ns-card: #ffffff;
+  --ns-fg: #1b1f24;
+  --ns-muted: #646e78;
+  --ns-accent-wash: #e6f0ff;
+  --ns-sidebar-active: #eef4ff;
+  --ns-border: rgba(17, 24, 39, 0.07);
+  --ns-border-strong: rgba(17, 24, 39, 0.12);
+  --ns-success: #27a35a;
+  --ns-warning: #f5a623;
+  --ns-danger: #f03a3a;
+  --ns-orange: #f49e1b;
+  --ns-radius: 8px;
+  --ns-radius-card: 14px;
+  --ns-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --ns-shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.04), 0 1px 3px rgba(17, 24, 39, 0.06);
+  --ns-shadow-md: 0 4px 16px rgba(17, 24, 39, 0.06), 0 1px 4px rgba(17, 24, 39, 0.05);
+
+  // --- Element Plus: brand primary + blue shade ramp ---
   --el-color-primary: #0559c9;
   --el-color-primary-light-3: #3a7dd6;
   --el-color-primary-light-5: #82ace4;
   --el-color-primary-light-7: #b4ccef;
   --el-color-primary-light-8: #cdddf5;
-  --el-color-primary-light-9: #e6f0ff; // = Ticketing --accent wash
-  --el-color-primary-dark-2: #044aa1;
+  --el-color-primary-light-9: #e6f0ff; // accent wash
+  --el-color-primary-dark-2: #0449a6;
 
-  // --- status colors (Ticketing chart palette) ---
+  // --- status palette ---
   --el-color-success: #27a35a;
-  --el-color-warning: #f5a623; // NextLink orange, demoted to "notice" only
+  --el-color-warning: #f5a623;
   --el-color-danger: #f03a3a;
   --el-color-error: #f03a3a;
   --el-color-info: #646e78;
 
-  // --- surfaces / text / lines (light, UniFi) ---
+  // --- surfaces / text / lines (flat, light) ---
   --el-bg-color: #ffffff;          // cards / popovers
   --el-bg-color-page: #f6f8fa;     // app background
   --el-bg-color-overlay: #ffffff;
   --el-text-color-primary: #1b1f24;
   --el-text-color-regular: #50565e;
   --el-text-color-secondary: #646e78;
-  --el-border-color: rgba(17, 24, 39, 0.1);
-  --el-border-color-light: rgba(17, 24, 39, 0.07);
+  --el-border-color: rgba(17, 24, 39, 0.12);        // border-strong
+  --el-border-color-light: rgba(17, 24, 39, 0.07);  // border
   --el-border-color-lighter: rgba(17, 24, 39, 0.06);
-  --el-fill-color-light: #eef1f4;  // = Ticketing --secondary/--muted
+  --el-border-color-extra-light: rgba(17, 24, 39, 0.05);
+  --el-fill-color-light: #f1f4f8;
+  --el-fill-color-lighter: #f6f8fa;
   --el-fill-color-blank: #ffffff;
 
-  // --- shape: softer corners (Ticketing --radius 0.5rem) ---
+  // --- shape ---
   --el-border-radius-base: 8px;
   --el-border-radius-small: 6px;
+
+  // --- system font stack ---
+  --el-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
 
   // keep the project's legacy var in sync
   --primaryColor: #0559c9;
 }
 
+// -----------------------------------------------------------------------------
+// Base — solid flat background, system font. No washes, no blur.
+// -----------------------------------------------------------------------------
 body {
-  background: var(--el-bg-color-page);
-  color: var(--el-text-color-primary);
-  // Ticketing depth: subtle radial color washes fixed behind the app (UniFi blue + cyan + violet).
-  background-image:
-    radial-gradient(900px 520px at 96% -6%, color-mix(in srgb, var(--ns-primary) 14%, transparent), transparent 60%),
-    radial-gradient(820px 520px at -6% 108%, color-mix(in srgb, #00a5c7 12%, transparent), transparent 58%),
-    radial-gradient(720px 600px at 55% 118%, color-mix(in srgb, #8b5cf6 9%, transparent), transparent 60%);
-  background-attachment: fixed;
+  background: var(--ns-bg);
+  color: var(--ns-fg);
+  font-family: var(--el-font-family);
+  -webkit-font-smoothing: antialiased;
 }
 
-// Sidebar/menu: near-white rail with a blue active pill (UniFi).
-.el-menu {
-  --el-menu-bg-color: #ffffff;
-  --el-menu-text-color: #50565e;
-  --el-menu-hover-bg-color: #eef4ff;
-  --el-menu-active-color: #0559c9;
-  border-right: 1px solid rgba(17, 24, 39, 0.06);
-}
-.el-menu-item.is-active {
-  background: #eef4ff;
-  border-radius: 8px;
-  margin: 2px 8px;
-}
-
-// Cards/dialogs/popovers: frosted, elevated glass surfaces — Ticketing's signature .surface look,
-// mapped onto Element Plus containers. Translucent + blur so the gradient washes show through.
+// -----------------------------------------------------------------------------
+// Cards / dialogs / drawers / popovers / message box — solid white, flat.
+// -----------------------------------------------------------------------------
 .el-card,
 .el-dialog,
-.el-popover.el-popper,
 .el-message-box,
 .el-drawer {
-  border-radius: 12px;
+  background: var(--ns-card);
   border: 1px solid var(--el-border-color-light);
-  background: color-mix(in srgb, var(--el-bg-color) 78%, transparent);
-  backdrop-filter: blur(16px) saturate(150%);
-  -webkit-backdrop-filter: blur(16px) saturate(150%);
-  box-shadow:
-    0 1px 2px rgba(16, 24, 40, 0.06),
-    0 14px 30px -12px rgba(16, 24, 40, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  border-radius: var(--ns-radius-card);
+  box-shadow: var(--ns-shadow-md);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
-.el-table {
-  border-radius: 12px;
-  border: 1px solid var(--el-border-color-light);
-  overflow: hidden;
+.el-card {
+  --el-card-border-radius: var(--ns-radius-card);
 }
-.el-button {
-  border-radius: 8px;
-  font-weight: 500;
+.el-popover.el-popper,
+.el-dropdown__popper.el-popper,
+.el-select__popper.el-popper {
+  background: var(--ns-card);
+  border: 1px solid var(--el-border-color);
+  border-radius: 10px;
+  box-shadow: var(--ns-shadow-md);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
-// ---------------------------------------------------------------------------
-// Dark mode — Ticketing's full .dark palette mapped onto Element Plus dark vars.
-// useDark() (vueuse) toggles `html.dark`; element-plus dark css-vars are imported in main.js,
-// so we override them here (loaded last). Mirrors the dark block of Ticketing index.css.
-// ---------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// Tables — blue-wash header, soft borders, blue hover, no last-row border.
+// -----------------------------------------------------------------------------
+.el-table {
+  --el-table-border-color: var(--el-border-color-light);
+  --el-table-header-bg-color: #eef4ff;
+  --el-table-header-text-color: var(--ns-muted);
+  --el-table-text-color: var(--ns-fg);
+  --el-table-row-hover-bg-color: #eef4ff;
+  --el-table-bg-color: var(--ns-card);
+  --el-table-tr-bg-color: var(--ns-card);
+  border: 1px solid var(--el-border-color-light);
+  border-radius: var(--ns-radius-card);
+  overflow: hidden;
+}
+.el-table th.el-table__cell {
+  background: #eef4ff;
+  color: var(--ns-muted);
+  font-weight: 600;
+}
+.el-table td.el-table__cell {
+  color: var(--ns-fg);
+}
+// last row: drop the bottom border so it meets the rounded card edge cleanly
+.el-table__body tr:last-child td.el-table__cell {
+  border-bottom: none;
+}
+
+// -----------------------------------------------------------------------------
+// Buttons — 8px radius, weight 600. Primary blue; default = white→accent-wash.
+// -----------------------------------------------------------------------------
+.el-button {
+  --el-button-font-weight: 600;
+  border-radius: var(--ns-radius);
+  font-weight: 600;
+}
+// primary
+.el-button--primary {
+  --el-button-bg-color: #0559c9;
+  --el-button-border-color: #0559c9;
+  --el-button-hover-bg-color: #0449a6;
+  --el-button-hover-border-color: #0449a6;
+  --el-button-active-bg-color: #0449a6;
+  --el-button-active-border-color: #0449a6;
+  box-shadow: 0 1px 2px rgba(5, 89, 201, 0.3);
+}
+// default / plain — white surface, strong border, hover → accent wash + blue
+.el-button--default,
+.el-button.is-plain {
+  --el-button-bg-color: var(--ns-card);
+  --el-button-border-color: var(--el-border-color);
+  --el-button-text-color: var(--ns-fg);
+  --el-button-hover-bg-color: var(--ns-accent-wash);
+  --el-button-hover-border-color: #0559c9;
+  --el-button-hover-text-color: #0559c9;
+}
+// danger (filled and text/plain variants land on the danger palette)
+.el-button--danger {
+  --el-button-bg-color: #f03a3a;
+  --el-button-border-color: #f03a3a;
+  --el-button-hover-bg-color: #d62d2d;
+  --el-button-hover-border-color: #d62d2d;
+}
+.el-button--danger.is-plain,
+.el-button--danger.is-text,
+.el-button--danger.is-link {
+  --el-button-text-color: #f03a3a;
+  --el-button-hover-text-color: #f03a3a;
+}
+
+// -----------------------------------------------------------------------------
+// Sidebar menu — white rail, blue active pill with a 3px rounded left accent bar.
+// -----------------------------------------------------------------------------
+.el-menu {
+  --el-menu-bg-color: #ffffff;
+  --el-menu-text-color: #39424c;
+  --el-menu-hover-bg-color: var(--ns-accent-wash);
+  --el-menu-active-color: #0559c9;
+  --el-menu-item-height: 42px;
+  --el-menu-sub-item-height: 40px;
+  background: var(--ns-card);
+  border-right: 1px solid var(--ns-border);
+}
+.el-menu-item,
+.el-sub-menu__title {
+  border-radius: var(--ns-radius);
+  margin: 2px 10px;
+  font-weight: 500;
+}
+.el-menu--collapse .el-menu-item,
+.el-menu--collapse .el-sub-menu__title {
+  margin: 2px 4px;
+}
+.el-menu-item:hover,
+.el-sub-menu__title:hover {
+  background: var(--ns-accent-wash);
+  color: var(--ns-fg);
+}
+// active item: accent-wash pill, blue bold text, blue left accent bar
+.el-menu-item.is-active {
+  background: var(--ns-sidebar-active);
+  color: #0559c9;
+  font-weight: 600;
+  position: relative;
+}
+.el-menu-item.is-active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 7px;
+  bottom: 7px;
+  width: 3px;
+  border-radius: 3px;
+  background: #0559c9;
+}
+// group titles ("My" / "System") → uppercase letter-spaced muted labels
+.el-sub-menu > .el-sub-menu__title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ns-muted);
+}
+.el-sub-menu.is-active > .el-sub-menu__title {
+  color: var(--ns-fg);
+}
+
+// -----------------------------------------------------------------------------
+// Inputs / textarea / select — 8px radius, blue focus ring.
+// -----------------------------------------------------------------------------
+.el-input__wrapper,
+.el-textarea__inner,
+.el-select__wrapper {
+  border-radius: var(--ns-radius);
+}
+.el-input__wrapper.is-focus,
+.el-select__wrapper.is-focused {
+  box-shadow: 0 0 0 1px #0559c9 inset, 0 0 0 3px rgba(5, 89, 201, 0.12);
+}
+.el-textarea__inner:focus {
+  box-shadow: 0 0 0 1px #0559c9 inset, 0 0 0 3px rgba(5, 89, 201, 0.12);
+}
+
+// -----------------------------------------------------------------------------
+// Tags — pill (radius 999px); default = blue accent-wash. Status variants kept.
+// -----------------------------------------------------------------------------
+.el-tag {
+  border-radius: 999px;
+  font-weight: 600;
+  border-color: transparent;
+}
+.el-tag,
+.el-tag--primary {
+  --el-tag-bg-color: var(--ns-accent-wash);
+  --el-tag-border-color: transparent;
+  --el-tag-text-color: #0559c9;
+}
+.el-tag--success {
+  --el-tag-bg-color: rgba(39, 163, 90, 0.13);
+  --el-tag-text-color: #27a35a;
+}
+.el-tag--warning {
+  --el-tag-bg-color: rgba(245, 166, 35, 0.16);
+  --el-tag-text-color: #9a6700;
+}
+.el-tag--danger {
+  --el-tag-bg-color: rgba(240, 58, 58, 0.13);
+  --el-tag-text-color: #f03a3a;
+}
+.el-tag--info {
+  --el-tag-bg-color: rgba(17, 24, 39, 0.06);
+  --el-tag-text-color: var(--ns-muted);
+}
+
+// -----------------------------------------------------------------------------
+// Pagination — active page blue/white.
+// -----------------------------------------------------------------------------
+.el-pagination.is-background .el-pager li.is-active,
+.el-pagination.is-background .el-pager li.is-active:hover {
+  background: #0559c9;
+  color: #fff;
+}
+.el-pagination {
+  --el-pagination-hover-color: #0559c9;
+}
+
+// -----------------------------------------------------------------------------
+// Form labels — muted, weight 600. Links — blue.
+// -----------------------------------------------------------------------------
+.el-form-item__label {
+  color: var(--ns-muted);
+  font-weight: 600;
+}
+a,
+.el-link {
+  color: #0559c9;
+}
+.el-link.el-link--default {
+  --el-link-text-color: #0559c9;
+  --el-link-hover-text-color: #0449a6;
+}
+
+// -----------------------------------------------------------------------------
+// Switch — success "on" track (matches mockup toggle).
+// -----------------------------------------------------------------------------
+.el-switch.is-checked .el-switch__core {
+  --el-switch-on-color: #27a35a;
+}
+
+// =============================================================================
+// Mockup utility classes — verbatim, for pages to adopt later.
+// Placed AFTER the Element Plus overrides so they win where applied.
+// =============================================================================
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 15px; border-radius: 8px; font-weight: 600; font-size: 13px;
+  cursor: pointer; border: 1px solid transparent; white-space: nowrap;
+}
+.btn-sm { padding: 6px 12px; font-size: 12.5px; }
+.btn-primary { background: var(--ns-primary); color: #fff; box-shadow: 0 1px 2px rgba(5, 89, 201, 0.3); }
+.btn-primary:hover { background: var(--ns-primary-press); }
+.btn-ghost { background: var(--ns-card); color: var(--ns-fg); border-color: var(--ns-border-strong); }
+.btn-ghost:hover { background: var(--ns-accent-wash); border-color: var(--ns-primary); color: var(--ns-primary); }
+.btn-danger { background: var(--ns-card); color: var(--ns-danger); border-color: var(--ns-border-strong); }
+.btn-danger:hover { background: rgba(240, 58, 58, 0.08); border-color: var(--ns-danger); }
+
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap;
+}
+.pill-blue { background: var(--ns-accent-wash); color: var(--ns-primary); }
+.pill-muted { background: rgba(17, 24, 39, 0.06); color: var(--ns-muted); }
+.pill-ok { background: rgba(39, 163, 90, 0.13); color: var(--ns-success); }
+.pill-warn { background: rgba(245, 166, 35, 0.16); color: #9a6700; }
+
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex: 0 0 auto; }
+.dot.on { background: var(--ns-success); box-shadow: 0 0 0 3px rgba(39, 163, 90, 0.15); }
+.dot.off { background: #c2cad3; }
+
+.mini-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 9px; border-radius: 999px; background: var(--ns-accent-wash);
+  font-size: 12px; font-weight: 600; color: var(--ns-fg);
+}
+.plat {
+  display: inline-grid; place-items: center; width: 18px; height: 18px;
+  border-radius: 5px; background: var(--ns-accent-wash); color: var(--ns-primary);
+  font-size: 10px; font-weight: 800; flex: 0 0 auto;
+}
+
+.page-head { display: flex; align-items: flex-end; gap: 12px; }
+.page-head h2 { font-size: 18px; font-weight: 700; margin: 0; }
+.page-head .sub { color: var(--ns-muted); font-size: 13px; margin-top: 3px; }
+.page-head .spacer { flex: 1; }
+
+.banner {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 13px 16px; border-radius: 10px; background: var(--ns-accent-wash);
+  color: #2a4a82; font-size: 13px; line-height: 1.5;
+}
+
+.empty-panel {
+  border: 1px dashed var(--ns-border-strong); border-radius: 12px;
+  padding: 40px 28px; text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.empty-panel h4 { margin: 0; font-size: 15px; }
+.empty-panel p { margin: 0; color: var(--ns-muted); font-size: 13px; max-width: 380px; line-height: 1.5; }
+
+.status-cell { display: flex; align-items: center; gap: 8px; }
+.linklike { color: var(--ns-primary); font-weight: 600; cursor: pointer; }
+.linklike:hover { text-decoration: underline; }
+.mut { color: var(--ns-muted); }
+.m { font-family: var(--ns-mono); font-variant-numeric: tabular-nums; font-size: 12.5px; }
+
+// =============================================================================
+// DARK MODE — useDark() (vueuse) toggles `html.dark`. Override the same EP vars
+// + utility classes that hardcode light colors. Still flat — no blur, no washes.
+//   bg #08111F · card #0e1a2b · fg #e7edf5 · muted #8b97a6 · accent-wash #13243a
+//   border rgba(255,255,255,.08) · border-strong rgba(255,255,255,.16)
+//   shadow-md 0 6px 20px rgba(0,0,0,.5)
+// =============================================================================
 html.dark {
-  --ns-primary: #2b8bff; // brighter UniFi blue for dark surfaces
+  --ns-bg: #08111f;
+  --ns-card: #0e1a2b;
+  --ns-fg: #e7edf5;
+  --ns-muted: #8b97a6;
+  --ns-accent-wash: #13243a;
+  --ns-sidebar-active: #13243a;
+  --ns-border: rgba(255, 255, 255, 0.08);
+  --ns-border-strong: rgba(255, 255, 255, 0.16);
+  --ns-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --ns-shadow-md: 0 6px 20px rgba(0, 0, 0, 0.5);
+
   --el-color-primary: #2b8bff;
   --el-color-primary-light-3: #2474d6;
   --el-color-primary-light-5: #1d5ea8;
   --el-color-primary-light-7: #163f6e;
   --el-color-primary-light-8: #13314f;
-  --el-color-primary-light-9: #16263d; // = Ticketing dark --accent
+  --el-color-primary-light-9: #13243a;
   --el-color-primary-dark-2: #5aa6ff;
 
-  --el-color-success: #27a35a;
-  --el-color-warning: #f5a623;
-  --el-color-danger: #f03a3a;
-  --el-color-error: #f03a3a;
-  --el-color-info: #9aa3ad;
-
-  --el-bg-color: #1c2026;          // cards / popovers
-  --el-bg-color-page: #14171c;     // app background
-  --el-bg-color-overlay: #1c2026;
-  --el-text-color-primary: #e6e8eb;
-  --el-text-color-regular: #aab2bd;
-  --el-text-color-secondary: #9aa3ad;
-  --el-border-color: rgba(255, 255, 255, 0.12);
+  --el-bg-color: #0e1a2b;
+  --el-bg-color-page: #08111f;
+  --el-bg-color-overlay: #0e1a2b;
+  --el-text-color-primary: #e7edf5;
+  --el-text-color-regular: #c3cdd8;
+  --el-text-color-secondary: #8b97a6;
+  --el-border-color: rgba(255, 255, 255, 0.16);
   --el-border-color-light: rgba(255, 255, 255, 0.08);
   --el-border-color-lighter: rgba(255, 255, 255, 0.06);
-  --el-fill-color-light: #232830;  // = Ticketing dark --secondary/--muted
-  --el-fill-color-blank: #1c2026;
+  --el-border-color-extra-light: rgba(255, 255, 255, 0.05);
+  --el-fill-color-light: #16263d;
+  --el-fill-color-lighter: #0e1a2b;
+  --el-fill-color-blank: #0e1a2b;
 
   --primaryColor: #2b8bff;
 
-  body {
-    background: var(--el-bg-color-page);
-    background-image:
-      radial-gradient(900px 520px at 96% -6%, color-mix(in srgb, var(--ns-primary) 18%, transparent), transparent 60%),
-      radial-gradient(820px 520px at -6% 108%, color-mix(in srgb, #00a5c7 14%, transparent), transparent 58%),
-      radial-gradient(720px 600px at 55% 118%, color-mix(in srgb, #8b5cf6 12%, transparent), transparent 60%);
-  }
+  body { background: var(--ns-bg); }
 
-  // Sidebar dark rail (Ticketing dark --sidebar #11141a).
+  // dark menu rail
   .el-menu {
-    --el-menu-bg-color: #11141a;
-    --el-menu-text-color: #aab2bd;
-    --el-menu-hover-bg-color: #16263d;
+    --el-menu-bg-color: #0e1a2b;
+    --el-menu-text-color: #c3cdd8;
+    --el-menu-hover-bg-color: #13243a;
     --el-menu-active-color: #6cb0ff;
-    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    border-right: 1px solid var(--ns-border);
   }
-  .el-menu-item.is-active {
-    background: #16263d;
-  }
+  .el-menu-item.is-active { background: var(--ns-sidebar-active); color: #6cb0ff; }
+  .el-menu-item.is-active::before { background: #6cb0ff; }
+  .el-sub-menu > .el-sub-menu__title { color: var(--ns-muted); }
 
-  // Dark glass: faint light top-edge, deeper shadow for elevation.
+  // dark tables — header on a dark accent wash
+  .el-table {
+    --el-table-header-bg-color: #13243a;
+    --el-table-row-hover-bg-color: #13243a;
+    --el-table-header-text-color: var(--ns-muted);
+    --el-table-text-color: var(--ns-fg);
+    --el-table-bg-color: var(--ns-card);
+    --el-table-tr-bg-color: var(--ns-card);
+  }
+  .el-table th.el-table__cell { background: #13243a; color: var(--ns-muted); }
+
+  // surfaces
   .el-card,
   .el-dialog,
-  .el-popover.el-popper,
   .el-message-box,
-  .el-drawer {
-    background: color-mix(in srgb, var(--el-bg-color) 72%, transparent);
-    box-shadow:
-      0 1px 2px rgba(0, 0, 0, 0.4),
-      0 22px 50px -16px rgba(0, 0, 0, 0.6),
-      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  .el-drawer,
+  .el-popover.el-popper,
+  .el-dropdown__popper.el-popper,
+  .el-select__popper.el-popper {
+    background: var(--ns-card);
+    box-shadow: var(--ns-shadow-md);
   }
+
+  // tags — blue default on dark accent wash; status variants keep hue
+  .el-tag,
+  .el-tag--primary {
+    --el-tag-bg-color: #13243a;
+    --el-tag-text-color: #6cb0ff;
+  }
+  .el-tag--info { --el-tag-bg-color: rgba(255, 255, 255, 0.07); --el-tag-text-color: var(--ns-muted); }
+
+  // utility classes that hardcoded light colors
+  .btn-ghost,
+  .btn-danger { background: var(--ns-card); }
+  .pill-muted { background: rgba(255, 255, 255, 0.07); }
+  .banner { color: #a8c5f0; }
+  .dot.off { background: #3a4757; }
 }
