@@ -8,7 +8,7 @@
         <el-form-item :label="T('Email')">
           <div>{{ userStore.email }}</div>
         </el-form-item>
-        <el-form-item :label="T('Password')" prop="password">
+        <el-form-item v-if="!hasLinkedProvider" :label="T('Password')" prop="password">
           <el-button type="primary" @click="showChangePwd">{{ T('ChangePassword') }}</el-button>
         </el-form-item>
         <el-form-item label="OIDC">
