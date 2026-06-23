@@ -18,7 +18,13 @@ const langs = {
   'es': { name: 'Español', value: es, sideBarWidth: '280px' },
   'zh-TW': { name: '中文繁体', value: zhTw, sideBarWidth: '210px' },
 }
-const defaultLang = localStorage.getItem('lang') || navigator.language || 'en'
+// Normalize to a supported locale key: browsers report e.g. "en-US"/"zh-CN",
+// but `langs`/`trans` are keyed "en","zh-CN","zh-TW". Without this, T() can't
+// find trans[lang] and every label falls back to its raw key (e.g. "MyPeer").
+const rawLang = localStorage.getItem('lang') || navigator.language || 'en'
+const defaultLang = langs[rawLang]
+  ? rawLang
+  : (langs[rawLang.split('-')[0]] ? rawLang.split('-')[0] : 'en')
 export const useAppStore = defineStore({
   id: 'App',
   state: () => ({
