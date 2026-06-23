@@ -161,6 +161,12 @@ export const asyncRoutes = [
         component: () => import('@/views/tag/index.vue'),
       },
       {
+        path: 'downloads',
+        name: 'Downloads',
+        meta: { title: 'Downloads', icon: 'Download' /*keepAlive: true*/ },
+        component: () => import('@/views/downloads/index.vue'),
+      },
+      {
         path: '/oauth',
         name: 'Oauth',
         meta: { title: 'OauthManage', icon: 'Link' /*keepAlive: true*/ },
