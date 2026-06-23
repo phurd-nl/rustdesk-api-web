@@ -1,38 +1,16 @@
 <template>
   <div class="setting">
-    <div class="menu-item">
-      <el-switch
-          v-model="isDark"
-          style="--el-switch-on-color:#18222c"
-      >
-        <template #active-action>
-          <el-icon>
-            <Moon/>
-          </el-icon>
-        </template>
-        <template #inactive-action>
-          <el-icon>
-            <Sunny color="#000"/>
-          </el-icon>
-        </template>
-      </el-switch>
-    </div>
-    <el-dropdown class="menu-item">
-      <div class="title">
-        <i class="el-icon el-tooltip__trigger" style="font-size: 22px;">
-          <svg viewBox="0 0 24 24" width="1.2em" height="1.2em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="9"></circle>
-            <path d="M3 12h18"></path>
-            <path d="M12 3c2.6 2.7 2.6 15.3 0 18c-2.6-2.7-2.6-15.3 0-18z"></path>
-          </svg>
-        </i>
-      </div>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item v-for="(v, k) in appStore.setting.langs" @click="changeLang(k)" :key="k">{{ v.name }}</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
+    <button
+        class="theme-btn"
+        type="button"
+        @click="isDark = !isDark"
+        :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+    >
+      <el-icon :size="17">
+        <Sunny v-if="isDark"/>
+        <Moon v-else/>
+      </el-icon>
+    </button>
     <el-dropdown class="menu-item">
       <div class="user-chip">
         <span class="av">{{ (user.username || '?').slice(0, 1).toUpperCase() }}</span>
@@ -55,7 +33,6 @@
 
 <script setup>
   import { useUserStore } from '@/store/user'
-  import { useAppStore } from '@/store/app'
   import changePwdDialog from '@/components/changePwdDialog.vue'
   import { ref } from 'vue'
   import { T } from '@/utils/i18n'
@@ -64,7 +41,6 @@
 
   const userStore = useUserStore()
   const user = userStore
-  const appStore = useAppStore()
 
   const logout = () => {
     userStore.logout()
@@ -74,9 +50,6 @@
   const changePwdVisible = ref(false)
   const showChangePwd = () => {
     changePwdVisible.value = true
-  }
-  const changeLang = (v) => {
-    appStore.changeLang(v)
   }
   const isDark = useDark()
   // const toggleDark = useToggle(isDark)
@@ -95,13 +68,23 @@
     }
   }
 
-  .title {
-    color: var(--ns-muted, #646e78);
-    display: flex;
-    align-items: center;
+  // theme toggle as a clean icon button (not a switch)
+  .theme-btn {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    cursor: pointer;
+    border: 1px solid var(--ns-border, rgba(17, 24, 39, 0.07));
+    background: var(--ns-card, #ffffff);
+    color: var(--ns-muted-fg, #646e78);
+    transition: background .15s, color .15s, border-color .15s;
 
     &:hover {
+      background: var(--ns-accent, #e6f0ff);
       color: var(--ns-primary, #0559c9);
+      border-color: var(--ns-primary, #0559c9);
     }
   }
 

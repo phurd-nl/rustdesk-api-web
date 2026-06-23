@@ -76,7 +76,7 @@
     }
 
     .session {
-      color: var(--ns-muted, #646e78);
+      color: var(--ns-muted-fg, #646e78);
       font-style: italic;
       font-weight: 600;
     }
