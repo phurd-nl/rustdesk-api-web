@@ -36,17 +36,26 @@
 </script>
 
 <style scoped lang="scss">
+  // visible icon button (was color:var(--ns-muted) = a near-white surface tint, so it
+  // rendered nearly invisible on the header — use --ns-muted-fg and give it button chrome)
   .ex-icon {
-    height: 100%;
-    display: flex;
-    align-items: center;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
     margin-right: 14px;
     font-size: 18px;
-    color: var(--ns-muted, #646e78);
+    border-radius: 9px;
+    color: var(--ns-muted-fg, #646e78);
+    border: 1px solid var(--ns-border, rgba(17, 24, 39, 0.07));
+    background: var(--ns-card, #ffffff);
     cursor: pointer;
+    transition: background .15s, color .15s, border-color .15s;
 
     &:hover {
+      background: var(--ns-accent, #e6f0ff);
       color: var(--ns-primary, #0559c9);
+      border-color: var(--ns-primary, #0559c9);
     }
   }
 

@@ -12,17 +12,15 @@
           <el-button type="primary" @click="showChangePwd">{{ T('ChangePassword') }}</el-button>
         </el-form-item>
         <el-form-item label="OIDC">
-          <div v-if="!hasLinkedProvider" class="empty-panel">
-            <template v-if="hasProvider">
-              <h4>No sign-in method linked</h4>
-              <p>Link your Microsoft Entra ID to sign in with your work account.</p>
-              <el-button type="primary" @click="toBindEntra">Link Microsoft Entra ID</el-button>
-            </template>
-            <template v-else>
-              <h4>No identity provider configured</h4>
-              <p>An administrator needs to add Microsoft Entra ID before you can sign in with your work account.</p>
-              <el-button type="primary" @click="toBindEntra">Configure in Identity Providers</el-button>
-            </template>
+          <!-- linked -> show the providers table; configured-but-unlinked -> a compact
+               link row (no big nag); nothing configured -> a compact configure hint -->
+          <div v-if="hasProvider && !hasLinkedProvider" class="oidc-inline">
+            <span class="oidc-inline__txt">Sign in with your Microsoft Entra ID work account.</span>
+            <el-button type="primary" size="small" @click="toBindEntra">Link Microsoft Entra ID</el-button>
+          </div>
+          <div v-else-if="!hasProvider" class="oidc-inline">
+            <span class="oidc-inline__txt mut">No identity provider configured yet.</span>
+            <el-button type="primary" size="small" @click="toBindEntra">Configure in Identity Providers</el-button>
           </div>
           <el-table v-else :data="oidcData" border fit>
             <el-table-column :label="T('IdP')" prop="op" align="center"></el-table-column>
@@ -122,5 +120,16 @@
   width: 600px;
   margin: 0 auto;
 
+}
+
+.oidc-inline {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+
+  &__txt {
+    font-size: 13px;
+  }
 }
 </style>
