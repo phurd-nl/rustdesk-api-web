@@ -66,6 +66,7 @@
               v-model="formData.client_secret"
               :type="formData.id ? 'password' : 'text'"
               :show-password="!formData.id"
+              :placeholder="formData.id ? T('Leave blank to keep the current secret') : ''"
           >
           </el-input>
         </el-form-item>
@@ -189,7 +190,21 @@
   })
   const rules = {
     client_id: [{ required: true, message: T('ParamRequired', { param: 'client_id' }), trigger: 'blur' }],
-    client_secret: [{ required: true, message: T('ParamRequired', { param: 'client_secret' }), trigger: 'blur' }],
+    client_secret: [
+      {
+        // Required on create; on edit, blank means "keep the existing secret"
+        // (the server never sends the secret to the browser, and preserves it
+        // when the submitted value is empty).
+        validator: (rule, value, callback) => {
+          if (!formData.id && !value) {
+            callback(new Error(T('ParamRequired', { param: 'client_secret' })))
+          } else {
+            callback()
+          }
+        },
+        trigger: 'blur',
+      },
+    ],
     // redirect_url: [{ required: true, message: T('ParamRequired', { param: 'redirect_url' }), trigger: 'blur' }],
     oauth_type: [{ required: true, message: T('ParamRequired', { param: 'oauth_type' }), trigger: 'blur' }],
     issuer: [{ required: true, message: T('ParamRequired', { param: 'issuer' }), trigger: 'blur' }],
@@ -220,7 +235,9 @@
     formData.oauth_type = row.oauth_type
     formData.issuer = row.issuer
     formData.client_id = row.client_id
-    formData.client_secret = row.client_secret
+    // Do not pre-fill the secret on edit. The server no longer sends it, and a
+    // blank submit tells the server to keep the existing secret.
+    formData.client_secret = ''
     // formData.redirect_url = row.redirect_url || defaultRedirect()
     formData.scopes = row.scopes
     formData.auto_register = row.auto_register
