@@ -8,10 +8,6 @@
         <el-header class="app-header">
           <g-header></g-header>
         </el-header>
-        <div class="header-tags">
-          <tags></tags>
-        </div>
-
         <el-main class="app-main">
           <router-view v-slot="{ Component }">
             <transition mode="out-in" name="el-fade-in-linear">
@@ -30,7 +26,6 @@
   import { useAppStore } from '@/store/app'
   import { useTagsStore } from '@/store/tags'
   import { ref, computed } from 'vue'
-  import Tags from '@/layout/components/tags/index.vue'
   import GAside from '@/layout/components/aside.vue'
   import GHeader from '@/layout/components/header.vue'
 
@@ -53,15 +48,6 @@
   align-items: center;
   height: 56px;
   padding: 0 20px;
-}
-
-.header-tags {
-  height: auto;
-  border-bottom: 1px solid var(--ns-border, rgba(17, 24, 39, 0.07));
-  background: var(--ns-bg, #f6f8fa);
-  display: flex;
-  padding: 6px 16px 0;
-  gap: 6px;
 }
 
 .app-left {

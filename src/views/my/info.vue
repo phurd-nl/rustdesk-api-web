@@ -13,9 +13,16 @@
         </el-form-item>
         <el-form-item label="OIDC">
           <div v-if="!hasLinkedProvider" class="empty-panel">
-            <h4>No sign-in method linked</h4>
-            <p>No sign-in method linked — link your Microsoft Entra ID to sign in with your work account.</p>
-            <el-button type="primary" @click="toBindEntra">Link Microsoft Entra ID</el-button>
+            <template v-if="hasProvider">
+              <h4>No sign-in method linked</h4>
+              <p>Link your Microsoft Entra ID to sign in with your work account.</p>
+              <el-button type="primary" @click="toBindEntra">Link Microsoft Entra ID</el-button>
+            </template>
+            <template v-else>
+              <h4>No identity provider configured</h4>
+              <p>An administrator needs to add Microsoft Entra ID before you can sign in with your work account.</p>
+              <el-button type="primary" @click="toBindEntra">Configure in Identity Providers</el-button>
+            </template>
           </div>
           <el-table v-else :data="oidcData" border fit>
             <el-table-column :label="T('IdP')" prop="op" align="center"></el-table-column>
@@ -45,6 +52,7 @@
 <script setup>
   import changePwdDialog from '@/components/changePwdDialog.vue'
   import { computed, ref } from 'vue'
+  import { useRouter } from 'vue-router'
   import { useUserStore } from '@/store/user'
   import { useAppStore } from '@/store/app'
   import { bind, unbind } from '@/api/oauth'
@@ -55,6 +63,7 @@
 
   const appStore = useAppStore()
   const userStore = useUserStore()
+  const router = useRouter()
   const changePwdVisible = ref(false)
   const showChangePwd = () => {
     changePwdVisible.value = true
@@ -63,12 +72,14 @@
   const getMyOauth = async () => {
     const res = await myOauth().catch(_ => false)
     if (res) {
-      oidcData.value = res.data
+      // server returns null (not []) when no providers are configured
+      oidcData.value = Array.isArray(res.data) ? res.data : []
     }
 
   }
   getMyOauth()
   const hasLinkedProvider = computed(_ => oidcData.value.some(o => o.status === 1))
+  const hasProvider = computed(_ => oidcData.value.length > 0)
   const toBind = async (row) => {
     const res = await bind({ op: row.op }).catch(_ => false)
     if (res) {
@@ -77,9 +88,13 @@
     }
   }
   const toBindEntra = () => {
-    const row = oidcData.value[0]
+    const row = oidcData.value.find(o => o.status !== 1) || oidcData.value[0]
     if (row) {
+      // a provider is configured -> start the OIDC link flow
       toBind(row)
+    } else {
+      // none configured yet -> send the admin to add one
+      router.push('/oauth')
     }
   }
   const toUnBind = async (row) => {

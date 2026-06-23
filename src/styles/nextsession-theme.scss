@@ -1,41 +1,73 @@
 // =============================================================================
-// NextSession console theme — flat / clean / light (UniFi · Ticketing look).
-// Reproduces the approved HTML/CSS mockup on top of Element Plus.
+// NextSession console theme — aligned EXACTLY to the NextLink "Ticketing" app's
+// design system (frontend/src/index.css). Frosted-glass surfaces + radial washes,
+// UniFi-blue forward, light + dark mode.
 //
-// Design tokens (source of truth — see approved mockup):
-//   primary #0559c9 (press #0449a6) · bg #f6f8fa · card #fff · fg #1b1f24 · muted #646e78
-//   accent-wash #e6f0ff · border rgba(17,24,39,.07) · border-strong rgba(17,24,39,.12)
-//   success #27a35a · warning #f5a623 · danger #f03a3a · brand-orange #f49e1b
-//   radius 8px (cards 14px) · system font stack
-//   shadow-sm 0 1px 2px rgba(17,24,39,.04),0 1px 3px rgba(17,24,39,.06)
-//   shadow-md 0 4px 16px rgba(17,24,39,.06),0 1px 4px rgba(17,24,39,.05)
+// Source of truth: Ticketing/frontend/src/index.css
+//   :root (light) and .dark blocks → mapped here onto Element Plus CSS vars in a
+//   light `:root` block and an `html.dark` block. Surface "standard" = frosted
+//   glass (NOT flat), reproduced from the @layer components .surface rule.
 //
-// This file is imported LAST in main.js so it overrides element-plus/dist/index.css
-// AND element-plus/theme-chalk/dark/css-vars.css. No backdrop blur, no gradients —
-// the mockup is intentionally flat.
+// Token reference (canonical, verbatim from Ticketing):
+//   LIGHT  bg #f6f8fa · fg #1b1f24 · card/popover #fff · primary #0559c9 (fg #fff)
+//          secondary/muted #eef1f4 · muted-fg #646e78 · accent #e6f0ff
+//          accent-fg #0559c9 · destructive #f03a3a · success #27a35a
+//          warning/notice #f5a623 · border rgba(17,24,39,.07) · input rgba(17,24,39,.1)
+//          ring #006fff · radius .5rem · sidebar #fff · sidebar-fg #50565e
+//          sidebar-accent #eef4ff · sidebar-accent-fg #0559c9 · sidebar-border rgba(17,24,39,.06)
+//   DARK   bg #14171c · fg #e6e8eb · card/popover #1c2026 · primary #2b8bff
+//          secondary/muted #232830 · muted-fg #9aa3ad · accent #16263d
+//          accent-fg #6cb0ff · destructive #f03a3a · border rgba(255,255,255,.08)
+//          input rgba(255,255,255,.12) · ring #2b8bff · sidebar #11141a
+//          sidebar-fg #aab2bd · sidebar-accent #16263d · sidebar-accent-fg #6cb0ff
+//          sidebar-border rgba(255,255,255,.06) · informative #2b8bff
+//   chart-2 #00a5c7 · chart-5 #8b5cf6 (used by the body washes)
+//
+// Imported LAST in main.js so it overrides element-plus/dist/index.css AND
+// element-plus/theme-chalk/dark/css-vars.css.
 // =============================================================================
 
+// =============================================================================
+// LIGHT — :root. Ticketing light tokens mapped onto Element Plus vars + our own.
+// =============================================================================
 :root {
-  // --- design tokens (also exposed for utility classes below) ---
-  --ns-primary: #0559c9;
-  --ns-primary-press: #0449a6;
-  --ns-bg: #f6f8fa;
-  --ns-card: #ffffff;
-  --ns-fg: #1b1f24;
-  --ns-muted: #646e78;
-  --ns-accent-wash: #e6f0ff;
-  --ns-sidebar-active: #eef4ff;
-  --ns-border: rgba(17, 24, 39, 0.07);
-  --ns-border-strong: rgba(17, 24, 39, 0.12);
-  --ns-success: #27a35a;
-  --ns-warning: #f5a623;
-  --ns-danger: #f03a3a;
-  --ns-orange: #f49e1b;
-  --ns-radius: 8px;
-  --ns-radius-card: 14px;
+  // --- Ticketing tokens (canonical names; drive everything below) ---
+  --ns-radius: 0.5rem;               // 8px
+  --ns-radius-card: 12px;            // rounded-xl
+  --ns-bg: #f6f8fa;                  // background
+  --ns-fg: #1b1f24;                  // foreground
+  --ns-card: #ffffff;                // card / popover
+  --ns-primary: #0559c9;             // primary
+  --ns-primary-fg: #ffffff;          // primary-foreground
+  --ns-primary-press: #0449a6;       // pressed primary (derived shade)
+  --ns-secondary: #eef1f4;           // secondary / muted
+  --ns-muted: #eef1f4;               // muted
+  --ns-muted-fg: #646e78;            // muted-foreground
+  --ns-accent: #e6f0ff;              // accent (hover/active wash)
+  --ns-accent-fg: #0559c9;           // accent-foreground
+  --ns-destructive: #f03a3a;         // destructive / danger
+  --ns-success: #27a35a;             // success / positive
+  --ns-warning: #f5a623;             // warning / notice
+  --ns-informative: #006fff;         // informative
+  --ns-border: rgba(17, 24, 39, 0.07);   // border
+  --ns-input: rgba(17, 24, 39, 0.1);     // input
+  --ns-ring: #006fff;                     // ring
+  --ns-chart-2: #00a5c7;             // wash hue (cyan)
+  --ns-chart-5: #8b5cf6;             // wash hue (violet)
+
+  // sidebar
+  --ns-sidebar: #ffffff;
+  --ns-sidebar-fg: #50565e;
+  --ns-sidebar-primary: #0559c9;
+  --ns-sidebar-primary-fg: #ffffff;
+  --ns-sidebar-accent: #eef4ff;
+  --ns-sidebar-accent-fg: #0559c9;
+  --ns-sidebar-border: rgba(17, 24, 39, 0.06);
+
   --ns-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --ns-shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.04), 0 1px 3px rgba(17, 24, 39, 0.06);
-  --ns-shadow-md: 0 4px 16px rgba(17, 24, 39, 0.06), 0 1px 4px rgba(17, 24, 39, 0.05);
+
+  // legacy alias used elsewhere in the project
+  --primaryColor: #0559c9;
 
   // --- Element Plus: brand primary + blue shade ramp ---
   --el-color-primary: #0559c9;
@@ -53,18 +85,18 @@
   --el-color-error: #f03a3a;
   --el-color-info: #646e78;
 
-  // --- surfaces / text / lines (flat, light) ---
-  --el-bg-color: #ffffff;          // cards / popovers
-  --el-bg-color-page: #f6f8fa;     // app background
+  // --- surfaces / text / lines ---
+  --el-bg-color: #ffffff;            // cards / popovers (the glass base color)
+  --el-bg-color-page: #f6f8fa;       // app background
   --el-bg-color-overlay: #ffffff;
   --el-text-color-primary: #1b1f24;
   --el-text-color-regular: #50565e;
   --el-text-color-secondary: #646e78;
-  --el-border-color: rgba(17, 24, 39, 0.12);        // border-strong
-  --el-border-color-light: rgba(17, 24, 39, 0.07);  // border
-  --el-border-color-lighter: rgba(17, 24, 39, 0.06);
+  --el-border-color: rgba(17, 24, 39, 0.1);          // input-strength line
+  --el-border-color-light: rgba(17, 24, 39, 0.07);   // border
+  --el-border-color-lighter: rgba(17, 24, 39, 0.06); // sidebar-border
   --el-border-color-extra-light: rgba(17, 24, 39, 0.05);
-  --el-fill-color-light: #f1f4f8;
+  --el-fill-color-light: #eef1f4;    // secondary/muted
   --el-fill-color-lighter: #f6f8fa;
   --el-fill-color-blank: #ffffff;
 
@@ -73,132 +105,143 @@
   --el-border-radius-small: 6px;
 
   // --- system font stack ---
-  --el-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-
-  // keep the project's legacy var in sync
-  --primaryColor: #0559c9;
+  --el-font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-// -----------------------------------------------------------------------------
-// Base — solid flat background, system font. No washes, no blur.
-// -----------------------------------------------------------------------------
+// =============================================================================
+// Base — Ticketing's radial washes so the frosted glass has depth to blur.
+// Three layered radial-gradients (primary / chart-2 / chart-5), fixed.
+// =============================================================================
 body {
-  background: var(--ns-bg);
+  background-color: var(--ns-bg);
   color: var(--ns-fg);
   font-family: var(--el-font-family);
   -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(
+      900px 520px at 96% -6%,
+      color-mix(in srgb, var(--ns-primary) 20%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      820px 520px at -6% 108%,
+      color-mix(in srgb, var(--ns-chart-2) 18%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      720px 600px at 55% 118%,
+      color-mix(in srgb, var(--ns-chart-5) 12%, transparent),
+      transparent 60%
+    );
+  background-attachment: fixed;
 }
 
-// -----------------------------------------------------------------------------
-// Cards / dialogs / drawers / popovers / message box — solid white, flat.
-// -----------------------------------------------------------------------------
+// =============================================================================
+// SURFACE STANDARD — frosted glass. Applies to card/dialog/drawer/message-box
+// and all popper popovers. Translucent card color + blur+saturate, layered
+// elevation, glassy top edge. (Ticketing @layer components .surface.)
+// =============================================================================
 .el-card,
 .el-dialog,
+.el-drawer,
 .el-message-box,
-.el-drawer {
-  background: var(--ns-card);
-  border: 1px solid var(--el-border-color-light);
+.el-popover.el-popper,
+.el-dropdown__popper.el-popper,
+.el-select__popper.el-popper {
+  background: color-mix(in srgb, var(--el-bg-color) 70%, transparent);
+  border: 1px solid var(--ns-border);
   border-radius: var(--ns-radius-card);
-  box-shadow: var(--ns-shadow-md);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  box-shadow:
+    0 1px 2px rgba(16, 24, 40, 0.06),
+    0 14px 30px -12px rgba(16, 24, 40, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 .el-card {
   --el-card-border-radius: var(--ns-radius-card);
 }
-.el-popover.el-popper,
-.el-dropdown__popper.el-popper,
-.el-select__popper.el-popper {
-  background: var(--ns-card);
-  border: 1px solid var(--el-border-color);
-  border-radius: 10px;
-  box-shadow: var(--ns-shadow-md);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
 
-// -----------------------------------------------------------------------------
-// Tables — blue-wash header, soft borders, blue hover, no last-row border.
-// -----------------------------------------------------------------------------
+// =============================================================================
+// Tables — faint accent/secondary header tint, muted header text, accent hover.
+// =============================================================================
 .el-table {
-  --el-table-border-color: var(--el-border-color-light);
-  --el-table-header-bg-color: #eef4ff;
-  --el-table-header-text-color: var(--ns-muted);
+  --el-table-border-color: var(--ns-border);
+  --el-table-header-bg-color: var(--ns-sidebar-accent);
+  --el-table-header-text-color: var(--ns-muted-fg);
   --el-table-text-color: var(--ns-fg);
-  --el-table-row-hover-bg-color: #eef4ff;
-  --el-table-bg-color: var(--ns-card);
-  --el-table-tr-bg-color: var(--ns-card);
-  border: 1px solid var(--el-border-color-light);
+  --el-table-row-hover-bg-color: var(--ns-accent);
+  --el-table-bg-color: transparent;
+  --el-table-tr-bg-color: transparent;
+  border: 1px solid var(--ns-border);
   border-radius: var(--ns-radius-card);
   overflow: hidden;
 }
 .el-table th.el-table__cell {
-  background: #eef4ff;
-  color: var(--ns-muted);
+  background: var(--ns-sidebar-accent);
+  color: var(--ns-muted-fg);
   font-weight: 600;
 }
 .el-table td.el-table__cell {
   color: var(--ns-fg);
 }
-// last row: drop the bottom border so it meets the rounded card edge cleanly
+// last row: drop bottom border so it meets the rounded card edge cleanly
 .el-table__body tr:last-child td.el-table__cell {
   border-bottom: none;
 }
 
-// -----------------------------------------------------------------------------
-// Buttons — 8px radius, weight 600. Primary blue; default = white→accent-wash.
-// -----------------------------------------------------------------------------
+// =============================================================================
+// Buttons — radius 8px, weight 600. Primary filled; default = white→accent hover.
+// =============================================================================
 .el-button {
   --el-button-font-weight: 600;
   border-radius: var(--ns-radius);
   font-weight: 600;
 }
-// primary
 .el-button--primary {
-  --el-button-bg-color: #0559c9;
-  --el-button-border-color: #0559c9;
-  --el-button-hover-bg-color: #0449a6;
-  --el-button-hover-border-color: #0449a6;
-  --el-button-active-bg-color: #0449a6;
-  --el-button-active-border-color: #0449a6;
+  --el-button-bg-color: var(--ns-primary);
+  --el-button-border-color: var(--ns-primary);
+  --el-button-hover-bg-color: var(--ns-primary-press);
+  --el-button-hover-border-color: var(--ns-primary-press);
+  --el-button-active-bg-color: var(--ns-primary-press);
+  --el-button-active-border-color: var(--ns-primary-press);
   box-shadow: 0 1px 2px rgba(5, 89, 201, 0.3);
 }
-// default / plain — white surface, strong border, hover → accent wash + blue
 .el-button--default,
 .el-button.is-plain {
   --el-button-bg-color: var(--ns-card);
-  --el-button-border-color: var(--el-border-color);
+  --el-button-border-color: var(--ns-input);
   --el-button-text-color: var(--ns-fg);
-  --el-button-hover-bg-color: var(--ns-accent-wash);
-  --el-button-hover-border-color: #0559c9;
-  --el-button-hover-text-color: #0559c9;
+  --el-button-hover-bg-color: var(--ns-accent);
+  --el-button-hover-border-color: var(--ns-primary);
+  --el-button-hover-text-color: var(--ns-accent-fg);
 }
-// danger (filled and text/plain variants land on the danger palette)
 .el-button--danger {
-  --el-button-bg-color: #f03a3a;
-  --el-button-border-color: #f03a3a;
+  --el-button-bg-color: var(--ns-destructive);
+  --el-button-border-color: var(--ns-destructive);
   --el-button-hover-bg-color: #d62d2d;
   --el-button-hover-border-color: #d62d2d;
 }
 .el-button--danger.is-plain,
 .el-button--danger.is-text,
 .el-button--danger.is-link {
-  --el-button-text-color: #f03a3a;
-  --el-button-hover-text-color: #f03a3a;
+  --el-button-text-color: var(--ns-destructive);
+  --el-button-hover-text-color: var(--ns-destructive);
 }
 
-// -----------------------------------------------------------------------------
-// Sidebar menu — white rail, blue active pill with a 3px rounded left accent bar.
-// -----------------------------------------------------------------------------
+// =============================================================================
+// Sidebar menu — white/dark rail, active = sidebar-accent pill + primary text
+// + 3px primary left accent bar (::before).
+// =============================================================================
 .el-menu {
-  --el-menu-bg-color: #ffffff;
-  --el-menu-text-color: #39424c;
-  --el-menu-hover-bg-color: var(--ns-accent-wash);
-  --el-menu-active-color: #0559c9;
+  --el-menu-bg-color: var(--ns-sidebar);
+  --el-menu-text-color: var(--ns-sidebar-fg);
+  --el-menu-hover-bg-color: var(--ns-accent);
+  --el-menu-active-color: var(--ns-sidebar-accent-fg);
   --el-menu-item-height: 42px;
   --el-menu-sub-item-height: 40px;
-  background: var(--ns-card);
-  border-right: 1px solid var(--ns-border);
+  background: var(--ns-sidebar);
+  border-right: 1px solid var(--ns-sidebar-border);
 }
 .el-menu-item,
 .el-sub-menu__title {
@@ -212,13 +255,12 @@ body {
 }
 .el-menu-item:hover,
 .el-sub-menu__title:hover {
-  background: var(--ns-accent-wash);
+  background: var(--ns-accent);
   color: var(--ns-fg);
 }
-// active item: accent-wash pill, blue bold text, blue left accent bar
 .el-menu-item.is-active {
-  background: var(--ns-sidebar-active);
-  color: #0559c9;
+  background: var(--ns-sidebar-accent);
+  color: var(--ns-sidebar-accent-fg);
   font-weight: 600;
   position: relative;
 }
@@ -230,7 +272,7 @@ body {
   bottom: 7px;
   width: 3px;
   border-radius: 3px;
-  background: #0559c9;
+  background: var(--ns-sidebar-primary);
 }
 // group titles ("My" / "System") → uppercase letter-spaced muted labels
 .el-sub-menu > .el-sub-menu__title {
@@ -238,15 +280,15 @@ body {
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--ns-muted);
+  color: var(--ns-muted-fg);
 }
 .el-sub-menu.is-active > .el-sub-menu__title {
   color: var(--ns-fg);
 }
 
-// -----------------------------------------------------------------------------
-// Inputs / textarea / select — 8px radius, blue focus ring.
-// -----------------------------------------------------------------------------
+// =============================================================================
+// Inputs / textarea / select — radius, focus ring = ring color + 3px soft halo.
+// =============================================================================
 .el-input__wrapper,
 .el-textarea__inner,
 .el-select__wrapper {
@@ -254,15 +296,15 @@ body {
 }
 .el-input__wrapper.is-focus,
 .el-select__wrapper.is-focused {
-  box-shadow: 0 0 0 1px #0559c9 inset, 0 0 0 3px rgba(5, 89, 201, 0.12);
+  box-shadow: 0 0 0 1px var(--ns-ring) inset, 0 0 0 3px color-mix(in srgb, var(--ns-ring) 18%, transparent);
 }
 .el-textarea__inner:focus {
-  box-shadow: 0 0 0 1px #0559c9 inset, 0 0 0 3px rgba(5, 89, 201, 0.12);
+  box-shadow: 0 0 0 1px var(--ns-ring) inset, 0 0 0 3px color-mix(in srgb, var(--ns-ring) 18%, transparent);
 }
 
-// -----------------------------------------------------------------------------
-// Tags — pill (radius 999px); default = blue accent-wash. Status variants kept.
-// -----------------------------------------------------------------------------
+// =============================================================================
+// Tags — pill (radius 999px); default = accent wash. Status variants kept.
+// =============================================================================
 .el-tag {
   border-radius: 999px;
   font-weight: 600;
@@ -270,9 +312,9 @@ body {
 }
 .el-tag,
 .el-tag--primary {
-  --el-tag-bg-color: var(--ns-accent-wash);
+  --el-tag-bg-color: var(--ns-accent);
   --el-tag-border-color: transparent;
-  --el-tag-text-color: #0559c9;
+  --el-tag-text-color: var(--ns-accent-fg);
 }
 .el-tag--success {
   --el-tag-bg-color: rgba(39, 163, 90, 0.13);
@@ -288,46 +330,46 @@ body {
 }
 .el-tag--info {
   --el-tag-bg-color: rgba(17, 24, 39, 0.06);
-  --el-tag-text-color: var(--ns-muted);
+  --el-tag-text-color: var(--ns-muted-fg);
 }
 
-// -----------------------------------------------------------------------------
-// Pagination — active page blue/white.
-// -----------------------------------------------------------------------------
+// =============================================================================
+// Pagination — active page primary/white.
+// =============================================================================
 .el-pagination.is-background .el-pager li.is-active,
 .el-pagination.is-background .el-pager li.is-active:hover {
-  background: #0559c9;
+  background: var(--ns-primary);
   color: #fff;
 }
 .el-pagination {
-  --el-pagination-hover-color: #0559c9;
+  --el-pagination-hover-color: var(--ns-primary);
 }
 
-// -----------------------------------------------------------------------------
-// Form labels — muted, weight 600. Links — blue.
-// -----------------------------------------------------------------------------
+// =============================================================================
+// Form labels — muted, weight 600. Links — primary.
+// =============================================================================
 .el-form-item__label {
-  color: var(--ns-muted);
+  color: var(--ns-muted-fg);
   font-weight: 600;
 }
 a,
 .el-link {
-  color: #0559c9;
+  color: var(--ns-primary);
 }
 .el-link.el-link--default {
-  --el-link-text-color: #0559c9;
-  --el-link-hover-text-color: #0449a6;
+  --el-link-text-color: var(--ns-primary);
+  --el-link-hover-text-color: var(--ns-primary-press);
 }
 
-// -----------------------------------------------------------------------------
-// Switch — success "on" track (matches mockup toggle).
-// -----------------------------------------------------------------------------
+// =============================================================================
+// Switch — success "on" track.
+// =============================================================================
 .el-switch.is-checked .el-switch__core {
   --el-switch-on-color: #27a35a;
 }
 
 // =============================================================================
-// Mockup utility classes — verbatim, for pages to adopt later.
+// Mockup utility classes — recolored via tokens so they work in both modes.
 // Placed AFTER the Element Plus overrides so they win where applied.
 // =============================================================================
 .btn {
@@ -336,19 +378,19 @@ a,
   cursor: pointer; border: 1px solid transparent; white-space: nowrap;
 }
 .btn-sm { padding: 6px 12px; font-size: 12.5px; }
-.btn-primary { background: var(--ns-primary); color: #fff; box-shadow: 0 1px 2px rgba(5, 89, 201, 0.3); }
+.btn-primary { background: var(--ns-primary); color: var(--ns-primary-fg); box-shadow: 0 1px 2px rgba(5, 89, 201, 0.3); }
 .btn-primary:hover { background: var(--ns-primary-press); }
-.btn-ghost { background: var(--ns-card); color: var(--ns-fg); border-color: var(--ns-border-strong); }
-.btn-ghost:hover { background: var(--ns-accent-wash); border-color: var(--ns-primary); color: var(--ns-primary); }
-.btn-danger { background: var(--ns-card); color: var(--ns-danger); border-color: var(--ns-border-strong); }
-.btn-danger:hover { background: rgba(240, 58, 58, 0.08); border-color: var(--ns-danger); }
+.btn-ghost { background: var(--ns-card); color: var(--ns-fg); border-color: var(--ns-input); }
+.btn-ghost:hover { background: var(--ns-accent); border-color: var(--ns-primary); color: var(--ns-accent-fg); }
+.btn-danger { background: var(--ns-card); color: var(--ns-destructive); border-color: var(--ns-input); }
+.btn-danger:hover { background: rgba(240, 58, 58, 0.08); border-color: var(--ns-destructive); }
 
 .pill {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap;
 }
-.pill-blue { background: var(--ns-accent-wash); color: var(--ns-primary); }
-.pill-muted { background: rgba(17, 24, 39, 0.06); color: var(--ns-muted); }
+.pill-blue { background: var(--ns-accent); color: var(--ns-accent-fg); }
+.pill-muted { background: rgba(17, 24, 39, 0.06); color: var(--ns-muted-fg); }
 .pill-ok { background: rgba(39, 163, 90, 0.13); color: var(--ns-success); }
 .pill-warn { background: rgba(245, 166, 35, 0.16); color: #9a6700; }
 
@@ -358,127 +400,154 @@ a,
 
 .mini-tag {
   display: inline-flex; align-items: center; gap: 6px;
-  padding: 3px 9px; border-radius: 999px; background: var(--ns-accent-wash);
+  padding: 3px 9px; border-radius: 999px; background: var(--ns-accent);
   font-size: 12px; font-weight: 600; color: var(--ns-fg);
 }
 .plat {
   display: inline-grid; place-items: center; width: 18px; height: 18px;
-  border-radius: 5px; background: var(--ns-accent-wash); color: var(--ns-primary);
+  border-radius: 5px; background: var(--ns-accent); color: var(--ns-accent-fg);
   font-size: 10px; font-weight: 800; flex: 0 0 auto;
 }
 
 .page-head { display: flex; align-items: flex-end; gap: 12px; }
 .page-head h2 { font-size: 18px; font-weight: 700; margin: 0; }
-.page-head .sub { color: var(--ns-muted); font-size: 13px; margin-top: 3px; }
+.page-head .sub { color: var(--ns-muted-fg); font-size: 13px; margin-top: 3px; }
 .page-head .spacer { flex: 1; }
 
 .banner {
   display: flex; gap: 10px; align-items: flex-start;
-  padding: 13px 16px; border-radius: 10px; background: var(--ns-accent-wash);
+  padding: 13px 16px; border-radius: 10px; background: var(--ns-accent);
   color: #2a4a82; font-size: 13px; line-height: 1.5;
 }
 
 .empty-panel {
-  border: 1px dashed var(--ns-border-strong); border-radius: 12px;
+  border: 1px dashed var(--ns-input); border-radius: 12px;
   padding: 40px 28px; text-align: center;
   display: flex; flex-direction: column; align-items: center; gap: 8px;
 }
 .empty-panel h4 { margin: 0; font-size: 15px; }
-.empty-panel p { margin: 0; color: var(--ns-muted); font-size: 13px; max-width: 380px; line-height: 1.5; }
+.empty-panel p { margin: 0; color: var(--ns-muted-fg); font-size: 13px; max-width: 380px; line-height: 1.5; }
 
 .status-cell { display: flex; align-items: center; gap: 8px; }
 .linklike { color: var(--ns-primary); font-weight: 600; cursor: pointer; }
 .linklike:hover { text-decoration: underline; }
-.mut { color: var(--ns-muted); }
+.mut { color: var(--ns-muted-fg); }
 .m { font-family: var(--ns-mono); font-variant-numeric: tabular-nums; font-size: 12.5px; }
 
 // =============================================================================
-// DARK MODE — useDark() (vueuse) toggles `html.dark`. Override the same EP vars
-// + utility classes that hardcode light colors. Still flat — no blur, no washes.
-//   bg #08111F · card #0e1a2b · fg #e7edf5 · muted #8b97a6 · accent-wash #13243a
-//   border rgba(255,255,255,.08) · border-strong rgba(255,255,255,.16)
-//   shadow-md 0 6px 20px rgba(0,0,0,.5)
+// DARK MODE — useDark() (vueuse) toggles `html.dark`. Ticketing .dark tokens,
+// mapped onto our vars + the standard --el-* dark vars. Frosted glass kept;
+// only its shadow is swapped for the dark elevation recipe.
+//   bg #14171c · card/popover #1c2026 · fg #e6e8eb · primary #2b8bff
+//   secondary/muted #232830 · muted-fg #9aa3ad · accent #16263d · accent-fg #6cb0ff
+//   sidebar #11141a · sidebar-fg #aab2bd · sidebar-accent #16263d
+//   border rgba(255,255,255,.08) · input rgba(255,255,255,.12) · ring #2b8bff
 // =============================================================================
 html.dark {
-  --ns-bg: #08111f;
-  --ns-card: #0e1a2b;
-  --ns-fg: #e7edf5;
-  --ns-muted: #8b97a6;
-  --ns-accent-wash: #13243a;
-  --ns-sidebar-active: #13243a;
+  --ns-bg: #14171c;
+  --ns-fg: #e6e8eb;
+  --ns-card: #1c2026;
+  --ns-primary: #2b8bff;
+  --ns-primary-fg: #ffffff;
+  --ns-primary-press: #5aa6ff;
+  --ns-secondary: #232830;
+  --ns-muted: #232830;
+  --ns-muted-fg: #9aa3ad;
+  --ns-accent: #16263d;
+  --ns-accent-fg: #6cb0ff;
+  --ns-destructive: #f03a3a;
+  --ns-success: #27a35a;
+  --ns-warning: #f5a623;
+  --ns-informative: #2b8bff;
   --ns-border: rgba(255, 255, 255, 0.08);
-  --ns-border-strong: rgba(255, 255, 255, 0.16);
-  --ns-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --ns-shadow-md: 0 6px 20px rgba(0, 0, 0, 0.5);
+  --ns-input: rgba(255, 255, 255, 0.12);
+  --ns-ring: #2b8bff;
+  --ns-chart-2: #00a5c7;
+  --ns-chart-5: #8b5cf6;
 
+  --ns-sidebar: #11141a;
+  --ns-sidebar-fg: #aab2bd;
+  --ns-sidebar-primary: #2b8bff;
+  --ns-sidebar-primary-fg: #ffffff;
+  --ns-sidebar-accent: #16263d;
+  --ns-sidebar-accent-fg: #6cb0ff;
+  --ns-sidebar-border: rgba(255, 255, 255, 0.06);
+
+  --primaryColor: #2b8bff;
+
+  // --- Element Plus brand ramp (dark) ---
   --el-color-primary: #2b8bff;
   --el-color-primary-light-3: #2474d6;
   --el-color-primary-light-5: #1d5ea8;
   --el-color-primary-light-7: #163f6e;
   --el-color-primary-light-8: #13314f;
-  --el-color-primary-light-9: #13243a;
+  --el-color-primary-light-9: #16263d; // dark accent wash
   --el-color-primary-dark-2: #5aa6ff;
 
-  --el-bg-color: #0e1a2b;
-  --el-bg-color-page: #08111f;
-  --el-bg-color-overlay: #0e1a2b;
-  --el-text-color-primary: #e7edf5;
+  // --- stock --el-* dark vars → Ticketing dark values (for components that read them) ---
+  --el-bg-color: #1c2026;            // card / glass base
+  --el-bg-color-page: #14171c;       // app background
+  --el-bg-color-overlay: #1c2026;
+  --el-text-color-primary: #e6e8eb;
   --el-text-color-regular: #c3cdd8;
-  --el-text-color-secondary: #8b97a6;
-  --el-border-color: rgba(255, 255, 255, 0.16);
-  --el-border-color-light: rgba(255, 255, 255, 0.08);
-  --el-border-color-lighter: rgba(255, 255, 255, 0.06);
+  --el-text-color-secondary: #9aa3ad;
+  --el-border-color: rgba(255, 255, 255, 0.12);          // input
+  --el-border-color-light: rgba(255, 255, 255, 0.08);    // border
+  --el-border-color-lighter: rgba(255, 255, 255, 0.06);  // sidebar-border
   --el-border-color-extra-light: rgba(255, 255, 255, 0.05);
-  --el-fill-color-light: #16263d;
-  --el-fill-color-lighter: #0e1a2b;
-  --el-fill-color-blank: #0e1a2b;
+  --el-fill-color-light: #232830;    // secondary/muted
+  --el-fill-color-lighter: #14171c;
+  --el-fill-color-blank: #1c2026;
 
-  --primaryColor: #2b8bff;
-
-  body { background: var(--ns-bg); }
+  // washes stay subtle (driven by the recolored --ns-* hues above)
+  body { background-color: var(--ns-bg); }
 
   // dark menu rail
   .el-menu {
-    --el-menu-bg-color: #0e1a2b;
-    --el-menu-text-color: #c3cdd8;
-    --el-menu-hover-bg-color: #13243a;
-    --el-menu-active-color: #6cb0ff;
-    border-right: 1px solid var(--ns-border);
+    --el-menu-bg-color: var(--ns-sidebar);
+    --el-menu-text-color: var(--ns-sidebar-fg);
+    --el-menu-hover-bg-color: var(--ns-accent);
+    --el-menu-active-color: var(--ns-sidebar-accent-fg);
+    border-right: 1px solid var(--ns-sidebar-border);
   }
-  .el-menu-item.is-active { background: var(--ns-sidebar-active); color: #6cb0ff; }
-  .el-menu-item.is-active::before { background: #6cb0ff; }
-  .el-sub-menu > .el-sub-menu__title { color: var(--ns-muted); }
+  .el-menu-item.is-active { background: var(--ns-sidebar-accent); color: var(--ns-sidebar-accent-fg); }
+  .el-menu-item.is-active::before { background: var(--ns-sidebar-primary); }
+  .el-sub-menu > .el-sub-menu__title { color: var(--ns-muted-fg); }
 
-  // dark tables — header on a dark accent wash
+  // dark tables — header on the dark accent wash
   .el-table {
-    --el-table-header-bg-color: #13243a;
-    --el-table-row-hover-bg-color: #13243a;
-    --el-table-header-text-color: var(--ns-muted);
+    --el-table-header-bg-color: var(--ns-accent);
+    --el-table-row-hover-bg-color: var(--ns-accent);
+    --el-table-header-text-color: var(--ns-muted-fg);
     --el-table-text-color: var(--ns-fg);
-    --el-table-bg-color: var(--ns-card);
-    --el-table-tr-bg-color: var(--ns-card);
+    --el-table-bg-color: transparent;
+    --el-table-tr-bg-color: transparent;
   }
-  .el-table th.el-table__cell { background: #13243a; color: var(--ns-muted); }
+  .el-table th.el-table__cell { background: var(--ns-accent); color: var(--ns-muted-fg); }
 
-  // surfaces
+  // surfaces — keep the frosted glass; swap only the elevation shadow for dark.
   .el-card,
   .el-dialog,
-  .el-message-box,
   .el-drawer,
+  .el-message-box,
   .el-popover.el-popper,
   .el-dropdown__popper.el-popper,
   .el-select__popper.el-popper {
-    background: var(--ns-card);
-    box-shadow: var(--ns-shadow-md);
+    background: color-mix(in srgb, var(--el-bg-color) 70%, transparent);
+    border: 1px solid var(--ns-border);
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.4),
+      0 22px 50px -16px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
   }
 
   // tags — blue default on dark accent wash; status variants keep hue
   .el-tag,
   .el-tag--primary {
-    --el-tag-bg-color: #13243a;
-    --el-tag-text-color: #6cb0ff;
+    --el-tag-bg-color: var(--ns-accent);
+    --el-tag-text-color: var(--ns-accent-fg);
   }
-  .el-tag--info { --el-tag-bg-color: rgba(255, 255, 255, 0.07); --el-tag-text-color: var(--ns-muted); }
+  .el-tag--info { --el-tag-bg-color: rgba(255, 255, 255, 0.07); --el-tag-text-color: var(--ns-muted-fg); }
 
   // utility classes that hardcoded light colors
   .btn-ghost,
