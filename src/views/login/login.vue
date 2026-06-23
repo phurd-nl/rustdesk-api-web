@@ -38,7 +38,13 @@
           class="oidc-btn"
           :class="{ 'oidc-primary': disablePwd }"
           :type="disablePwd ? 'primary' : 'default'">
-          <img :src="getProviderImage(option.name)" alt="provider" class="oidc-icon"/>
+          <svg v-if="isMicrosoft(option.name)" class="oidc-icon" viewBox="0 0 23 23" aria-hidden="true">
+            <rect x="1" y="1" width="10" height="10" fill="#F25022"></rect>
+            <rect x="12" y="1" width="10" height="10" fill="#7FBA00"></rect>
+            <rect x="1" y="12" width="10" height="10" fill="#00A4EF"></rect>
+            <rect x="12" y="12" width="10" height="10" fill="#FFB900"></rect>
+          </svg>
+          <img v-else :src="getProviderImage(option.name)" alt="provider" class="oidc-icon"/>
           <span>{{ ssoLabel(option.name) }}</span>
         </el-button>
       </div>
@@ -116,6 +122,8 @@
   const handleOIDCLogin = (provider) => {
     userStore.oidc(provider, platform, browser)
   }
+  // Microsoft Entra providers show the Microsoft logo instead of the generic OIDC mark
+  const isMicrosoft = (name) => /entra|microsoft|azure|windows/i.test(name || '')
 
   import googleImage from '@/assets/google.png'
   import githubImage from '@/assets/github.png'

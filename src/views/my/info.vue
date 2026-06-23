@@ -32,8 +32,10 @@
             </el-table-column>
             <el-table-column :label="T('Actions')" align="center" width="200">
               <template #default="{ row }">
-                <el-button v-if="row.status === 1" type="danger" size="small" @click="toUnBind(row)">{{ T('UnBind') }}</el-button>
-                <el-button v-else type="success" size="small" @click="toBind(row)">{{ T('ToBind') }}</el-button>
+                <!-- Unlink hidden: an SSO-linked (often SSO-only) account could lock
+                     itself out by unlinking; show a non-actionable state instead. -->
+                <span v-if="row.status === 1" class="mut">—</span>
+                <el-button v-else type="primary" size="small" @click="toBind(row)">{{ T('ToBind') }}</el-button>
               </template>
             </el-table-column>
           </el-table>
